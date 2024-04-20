@@ -1,0 +1,21 @@
+Crimson Backend
+
+Purpose
+The purpose of this  project is to test your skills and knowledge of what you’ve learnt in the past 3 months. 
+
+Protect : 
+Crimson Inc. has employed you to build an api for their new e-commerce platform. 
+
+Requirements : 
+ 
+User Registration and Authentication
+- Users can register for an account with their email. An account per email. 
+- User authentication is required for access to the platform.
+- Users can reset their passwords if forgotten, update profile, update or add delivery address, buy products or delete account, add to cart, place orders, cancel order, remove from cart, add or remove to/from wishlist
+- view products 
+- Sort products
+- Search for products 
+
+Admin 
+- adds products, categorize the products , suspend or ban user accounts. Mange user orders. 
+- Products specifications and categories ( you decide the product details and everything).
