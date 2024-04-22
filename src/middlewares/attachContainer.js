@@ -20,7 +20,7 @@ class AttachContainerMiddleware {
    */
   handle = (req, res, next) => {
     // Attach the container to the request object
-    req?.container = this.container;
+    req.container = this.container;
 
     // Proceed to the next middleware in the stack
     next();
