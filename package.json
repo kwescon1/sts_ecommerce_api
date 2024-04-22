@@ -2,14 +2,26 @@
   "name": "sts-ecommerce",
   "version": "1.0.0",
   "description": "Slightly Techie E-commerce",
-  "main": "app.js",
+  "main": "dist/app.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/app.js",
+    "dev": "nodemon --exec babel-node src/app.js",
+    "build": "babel src -d dist --presets @babel/preset-env --ignore node_modules,dist"
   },
   "keywords": [],
-  "author": "",
+  "author": "Kwesi Odame Danquah",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.4",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.24.4",
+    "nodemon": "^3.1.0"
   }
 }
