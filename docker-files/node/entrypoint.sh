@@ -15,7 +15,7 @@ echo "Starting the Express application..."
 if [ "$APP_ENV" = "local" ]; then
   echo "${GREEN}Running in Development Mode${NC}"
   # Explicitly install devDependencies in case they were missed
-  npm install --only=development
+  npm install --only=dev
   npm run dev
 else
   echo "${GREEN}Running in Production Mode${NC}"
