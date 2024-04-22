@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import router from "./routes/index.js";
 import errorHandler from "./exceptions/handler.js";
 import CorsMiddleware from "./middlewares/handleCors.js";
 import RateLimiter from "./middlewares/rateLimiter.js";
@@ -10,6 +11,7 @@ import ConvertEmptyStringsToNull from "./middlewares/ConvertEmptyStringsToNull.j
 import TrimStringsMiddleware from "./middlewares/trimStrings.js";
 import container from "./config/container.js";
 import AttachContainerMiddleware from "./middlewares/AttachContainer.js";
+import NotFoundException from "./exceptions/notFoundException.js";
 
 const app = express();
 const corsMiddleware = new CorsMiddleware().middleware; // no options added so default options will be used
@@ -35,7 +37,14 @@ app.use(responseMacro);
 
 app.use(convertEmptyStringsToNull);
 app.use(trimStrings);
-app.use(appContainer);
+
+// Apply API middleware to /api/v1 routes
+app.use("/api/v1", appContainer, router);
+
+app.all("*", (req, res, next) => {
+  // Throw a NotFoundException for any undefined route
+  throw new NotFoundException("The requested resource was not found");
+});
 
 app.use(errorHandler.handle);
 const port = process.env.PORT;
