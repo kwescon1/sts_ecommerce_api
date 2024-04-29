@@ -28,4 +28,4 @@ class ConvertEmptyStringsToNull {
   }
 }
 
-export default new ConvertEmptyStringsToNull();
+module.exports = new ConvertEmptyStringsToNull();

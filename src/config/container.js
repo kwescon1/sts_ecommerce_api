@@ -1,4 +1,4 @@
-import { createContainer, asClass, asValue, asFunction } from "awilix";
+const { createContainer, asClass, asValue, asFunction } = require("awilix");
 
 // Initialize the container
 const container = createContainer();
@@ -8,4 +8,4 @@ container.register({
   // exampleService: asClass(ExampleService).scoped(),
 });
 
-export default container;
+module.exports = container;

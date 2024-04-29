@@ -1,5 +1,4 @@
-import cors from "cors";
-
+const cors = require("cors");
 /**
  * Middleware class to configure and enable Cross-Origin Resource Sharing (CORS).
  */
@@ -34,4 +33,4 @@ class CorsMiddleware {
   }
 }
 
-export default CorsMiddleware;
+module.exports = CorsMiddleware;

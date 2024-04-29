@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit";
+const rateLimit = require("express-rate-limit");
 
 /**
  * Class to configure and apply rate limiting in an Express application.
@@ -32,4 +32,4 @@ class RateLimiter {
   }
 }
 
-export default RateLimiter;
+module.exports = RateLimiter;

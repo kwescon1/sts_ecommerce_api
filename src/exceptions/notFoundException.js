@@ -1,4 +1,4 @@
-import { StatusCodes } from "http-status-codes";
+const { StatusCodes } = require("http-status-codes");
 
 class NotFoundException extends Error {
   constructor(message = "Resource Not Found", status = StatusCodes.NOT_FOUND) {
@@ -8,4 +8,4 @@ class NotFoundException extends Error {
   }
 }
 
-export default NotFoundException;
+module.exports = NotFoundException;

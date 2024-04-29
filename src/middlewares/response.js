@@ -1,6 +1,6 @@
 //middleware/responseMacro.js // define app responses
 
-import { StatusCodes } from "http-status-codes";
+const { StatusCodes } = require("http-status-codes");
 
 function responseMacro(req, res, next) {
   res.success = (data, message = "") => {
@@ -42,4 +42,4 @@ function responseMacro(req, res, next) {
   next();
 }
 
-export default responseMacro;
+module.exports = responseMacro;

@@ -1,53 +1,56 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
-import express from "express";
-import router from "./routes/index.js";
-import errorHandler from "./exceptions/handler.js";
-import CorsMiddleware from "./middlewares/handleCors.js";
-import RateLimiter from "./middlewares/rateLimiter.js";
-import responseMacro from "./middlewares/response.js";
-import ConvertEmptyStringsToNull from "./middlewares/ConvertEmptyStringsToNull.js";
-import TrimStringsMiddleware from "./middlewares/trimStrings.js";
-import container from "./config/container.js";
-import AttachContainerMiddleware from "./middlewares/AttachContainer.js";
-import NotFoundException from "./exceptions/notFoundException.js";
-
+const express = require("express");
 const app = express();
-const corsMiddleware = new CorsMiddleware().middleware; // no options added so default options will be used
-const rateLimiter = new RateLimiter().middleware; // no configured options. default options will be used
 
-const convertEmptyStringsToNull = ConvertEmptyStringsToNull.handle;
-const trimStrings = TrimStringsMiddleware.handle;
-const appContainer = new AttachContainerMiddleware(container).handle;
+app.set("trust proxy", 1);
+
+const router = require("./routes/index.js");
+const errorHandler = require("./exceptions/handler.js");
+const CorsMiddleware = require("./middlewares/handleCors.js");
+const RateLimiter = require("./middlewares/rateLimiter.js");
+const responseMacro = require("./middlewares/response.js");
+const ConvertEmptyStringsToNull = require("./middlewares/ConvertEmptyStringsToNull.js");
+const TrimStringsMiddleware = require("./middlewares/trimStrings.js");
+const HelmetConfig = require("./middlewares/helmet.js");
+const container = require("./config/container.js");
+const AttachContainerMiddleware = require("./middlewares/AttachContainer.js");
+const NotFoundException = require("./exceptions/notFoundException.js");
+
+// Security first
+app.use(HelmetConfig.getMiddleware());
+
+// Body parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Middlewares for request handling
+app.use(new CorsMiddleware().middleware);
+app.use(new RateLimiter().middleware);
+app.use(responseMacro);
+app.use(ConvertEmptyStringsToNull.handle);
+app.use(TrimStringsMiddleware.handle);
+app.use(new AttachContainerMiddleware(container).handle);
 
 // Define a simple route
 app.get("/", (req, res) => {
   res.send("It is working");
 });
 
-app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+// Route groupings
+app.use("/api/v1", router);
 
-app.use(corsMiddleware);
-app.use(rateLimiter);
-app.use(responseMacro);
-
-//    TODO this.handleMaintenanceMode();
-
-app.use(convertEmptyStringsToNull);
-app.use(trimStrings);
-
-// Apply API middleware to /api/v1 routes
-app.use("/api/v1", appContainer, router);
-
+// Catch-all for undefined routes
 app.all("*", (req, res, next) => {
-  // Throw a NotFoundException for any undefined route
   throw new NotFoundException("The requested resource was not found");
 });
 
+// Error handling
 app.use(errorHandler.handle);
-const port = process.env.PORT;
+
+// Server initialization
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

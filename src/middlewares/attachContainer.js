@@ -27,4 +27,4 @@ class AttachContainerMiddleware {
   };
 }
 
-export default AttachContainerMiddleware;
+module.exports = AttachContainerMiddleware;

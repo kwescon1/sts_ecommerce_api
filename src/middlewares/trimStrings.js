@@ -36,4 +36,4 @@ class TrimStringsMiddleware {
 }
 
 // Export the TrimStringsMiddleware class for use in the application
-export default new TrimStringsMiddleware();
+module.exports = new TrimStringsMiddleware();

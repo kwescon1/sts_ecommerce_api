@@ -1,6 +1,6 @@
 // Import the logger
-import { StatusCodes } from "http-status-codes";
-import logger from "../config/logging.js";
+const { StatusCodes } = require("http-status-codes");
+const logger = require("../config/logging");
 
 /**
  * Error handling middleware class to log errors and send appropriate responses.
@@ -20,7 +20,7 @@ class ErrorHandler {
       url: req.originalUrl,
       ip: req.ip,
       error: err.message,
-      stack: err.stack, // Getting the first line of the stack trace
+      stack: err.stack.split("\n")[0], // Getting the first line of the stack trace
     };
 
     // Log the error details
@@ -43,4 +43,4 @@ class ErrorHandler {
 }
 
 // Export the ErrorHandler class instance
-export default new ErrorHandler();
+module.exports = new ErrorHandler();

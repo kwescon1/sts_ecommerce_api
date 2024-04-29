@@ -1,12 +1,10 @@
-import { createLogger, format, transports } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+const { createLogger, format, transports } = require("winston");
+const DailyRotateFile = require("winston-daily-rotate-file");
+const path = require("path");
+const fs = require("fs");
 
-// Convert the import.meta.url to a file path for the current module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// __dirname is already defined in CommonJS environment
+// __filename is already defined as well, representing this file's path
 
 // Construct the path to the root directory by moving up from the current directory (__dirname)
 const rootDirectory = path.join(__dirname, "../..");
@@ -42,7 +40,6 @@ if (process.env.APP_ENV !== "production") {
 
 // Create a logger
 const logger = createLogger({
-  // Combine the timestamp with the log message
   format: format.combine(
     format.timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
@@ -52,4 +49,4 @@ const logger = createLogger({
   transports: loggerTransports,
 });
 
-export default logger;
+module.exports = logger;
