@@ -31,6 +31,10 @@ class ErrorHandler {
       case "NotFoundException":
         res.notFound(err.message);
         break;
+
+      case "ValidationException":
+        res.error(err.message, err.status);
+        break;
       // Add more cases as needed for other custom errors
       default:
         // Handle unexpected errors
