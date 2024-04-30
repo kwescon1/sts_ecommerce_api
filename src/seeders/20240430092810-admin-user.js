@@ -3,6 +3,7 @@
 const { hashPassword } = require("../utilities/utils");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
+const config = require("../config/config");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,12 +13,12 @@ module.exports = {
      *
      */
 
-    const dob = process.env.DOB
-      ? moment(process.env.DOB).format("YYYY-MM-DD")
+    const dob = config.user.dob
+      ? moment(config.user.dob).format("YYYY-MM-DD")
       : moment("1990-01-01").format("YYYY-MM-DD");
 
-    const password = process.env.PASSWORD
-      ? hashPassword(process.env.PASSWORD)
+    const password = config.user.password
+      ? hashPassword(config.user.password)
       : hashPassword("defaultPassword123");
 
     return queryInterface.bulkInsert(
@@ -25,12 +26,12 @@ module.exports = {
       [
         {
           id: uuidv4(),
-          first_name: process.env.FIRST_NAME || "Franque",
-          last_name: process.env.LAST_NAME || "Armoako",
-          username: process.env.USERNAME || "franque_armoako",
+          first_name: config.user.firstName || "Franque",
+          last_name: config.user.lastName || "Armoako",
+          username: config.user.username || "franque_armoako",
           dob: dob,
           password: password,
-          email: process.env.EMAIL,
+          email: config.user.email,
           is_admin: true,
         },
       ],
