@@ -1,12 +1,13 @@
+const config = require("./config");
 module.exports = {
   local: {
     use_env_variable: "DATABASE_URL",
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: process.env.DB_CONNECTION,
+    username: config.database.username,
+    password: config.database.password,
+    database: config.database.name,
+    host: config.database.host,
+    port: config.database.port,
+    dialect: config.database.connection,
     dialectOptions: {
       bigNumberStrings: true,
     },

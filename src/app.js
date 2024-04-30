@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config();
+const config = require("./config/config.js");
 
 const express = require("express");
 const app = express();
@@ -34,9 +35,9 @@ app.use(TrimStringsMiddleware.handle);
 app.use(new AttachContainerMiddleware(container).handle);
 
 // Define a simple route
-app.get("/", (req, res) => {
-  res.send("It is working");
-});
+// app.get("/", (req, res) => {
+//   res.send("It is working");
+// });
 
 // Route groupings
 app.use("/api/v1", router);
@@ -50,7 +51,7 @@ app.all("*", (req, res, next) => {
 app.use(errorHandler.handle);
 
 // Server initialization
-const port = process.env.PORT || 3000;
+const port = config.app.port || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
