@@ -2,9 +2,7 @@ const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 const path = require("path");
 const fs = require("fs");
-
-// __dirname is already defined in CommonJS environment
-// __filename is already defined as well, representing this file's path
+const config = require("./config");
 
 // Construct the path to the root directory by moving up from the current directory (__dirname)
 const rootDirectory = path.join(__dirname, "../..");
@@ -24,10 +22,10 @@ const dailyRotateFileTransport = new transports.DailyRotateFile({
 const loggerTransports = [dailyRotateFileTransport];
 
 // Conditionally add console transport if not in production environment
-if (process.env.APP_ENV !== "production") {
+if (config.app.environment !== "production") {
   loggerTransports.push(
     new transports.Console({
-      level: process.env.LOG_LEVEL || "debug",
+      level: config.app.logLevel || "debug",
       format: format.combine(
         format.colorize(),
         format.printf(
