@@ -54,6 +54,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
+      image_url: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: "/images/user.jpeg",
+      },
       is_admin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
