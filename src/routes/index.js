@@ -1,10 +1,10 @@
 const express = require("express");
-// import exampleRoutes from "./exampleRoutes.js";
+const authRoutes = require("../routes/authRoutes");
 
 // Create router instance
 const router = express.Router();
 
-// router.use("/exampleRoute", exampleRoutes);
+router.use("/auth", authRoutes);
 
 // export configured routes
 module.exports = router;
