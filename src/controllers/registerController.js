@@ -1,0 +1,29 @@
+const logger = require("../config/logging");
+const RegisterUserResource = require("../resources/registerUserResource");
+class RegisterController {
+  /**
+   * RegisterController constructor.
+   * Injects RegisterService for handling the business logic.
+   * @param {RegisterService} registerService - The service for task operations.
+   */
+  constructor({ registerService }) {
+    this.registerService = registerService;
+  }
+
+  /**
+   * Handles the request to register user.
+   * @param {Object} req - The Express request object.
+   * @param {Object} res - The Express response object.
+   */
+  async register(req, res) {
+    const { user, token } = await this.registerService.register(req.body);
+
+    const userResource = new RegisterUserResource(user);
+    return res.created(
+      { user: userResource.toJson(), token },
+      "Registration successful"
+    );
+  }
+}
+
+module.exports = RegisterController;
