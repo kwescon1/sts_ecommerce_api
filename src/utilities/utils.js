@@ -28,7 +28,12 @@ const generateToken = (user) => {
   return jwt.sign(payload, secret, { expiresIn });
 };
 
+const verifyToken = (token) => {
+  return jwt.verify(token, config.jwt.secret);
+};
+
 module.exports = {
   hashPassword,
   generateToken,
+  verifyToken,
 };
