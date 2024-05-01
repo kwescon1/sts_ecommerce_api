@@ -1,13 +1,15 @@
 "use strict";
-const { Model, ValidationError } = require("sequelize");
+const { Model } = require("sequelize");
 const ValidationException = require("../exceptions/validationException");
 const logger = require("../config/logging");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // Define association here
+      // Define associations here, if any
     }
   }
+
   User.init(
     {
       id: {
@@ -32,9 +34,9 @@ module.exports = (sequelize, DataTypes) => {
             eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
             if (new Date(value) > eighteenYearsAgo) {
-              logger.error("Validation error. age mus be 18 or greater");
+              logger.error("User age must be 18 or greater");
               throw new ValidationException(
-                "You must be at least 18 years old to register"
+                "User must be at least 18 years old to register"
               );
             }
           },
@@ -71,9 +73,21 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
-      underscored: true,
       timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      defaultScope: {
+        attributes: {
+          exclude: ["password", "created_at", "updated_at"],
+        },
+      },
+      scopes: {
+        withPassword: {
+          attributes: { include: ["password"] },
+        },
+      },
     }
   );
+
   return User;
 };
