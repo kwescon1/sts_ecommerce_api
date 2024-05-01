@@ -40,8 +40,8 @@ const config = {
     email: process.env.EMAIL,
   },
   jwt: {
-    secret: process.env.JWT_SECRET || "your_secret",
-    expiry: process.env.JWT_EXPIRY || "1h",
+    secret: process.env.JWT_SECRET,
+    expiry: process.env.JWT_EXPIRY,
   },
 };
 
