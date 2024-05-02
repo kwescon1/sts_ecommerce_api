@@ -1,9 +1,9 @@
 /**
- * @class RegisterUserResource
+ * @class UserResource
  */
-class RegisterUserResource {
+class UserResource {
   /**
-   * Constructs an instance of RegisterUserResource with a user object.
+   * Constructs an instance of UserResource with a user object.
    *
    * @param {Object} user - The user object containing data to be transformed.
    */
@@ -30,4 +30,4 @@ class RegisterUserResource {
   }
 }
 
-module.exports = RegisterUserResource;
+module.exports = UserResource;
