@@ -1,5 +1,5 @@
 const logger = require("../config/logging");
-const RegisterUserResource = require("../resources/registerUserResource");
+const UserResource = require("../resources/userResource");
 class RegisterController {
   /**
    * RegisterController constructor.
@@ -18,7 +18,7 @@ class RegisterController {
   async register(req, res) {
     const { user, token } = await this.registerService.register(req.body);
 
-    const userResource = new RegisterUserResource(user);
+    const userResource = new UserResource(user);
     return res.created(
       { user: userResource.toJson(), token },
       "Registration successful"
