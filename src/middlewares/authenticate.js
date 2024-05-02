@@ -1,5 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const { verifyToken } = require("../utilities/utils");
+const UnauthorizedException = require("../exceptions/unauthorizedException");
+const ForbiddenException = require("../exceptions/forbiddenException");
 
 const authenticate =
   (except = []) =>
@@ -14,15 +16,22 @@ const authenticate =
     const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
 
     if (!token) {
-      return res.error("Unauthorized Action", StatusCodes.UNAUTHORIZED);
+      throw new UnauthorizedException();
     }
 
     try {
       const decoded = verifyToken(token);
       req.user = decoded; //Attach user information to request
+
+      // check if user has been suspended
+
+      if (req.user?.is_suspended) {
+        throw new ForbiddenException("Suspended User");
+      }
+
       next();
     } catch (error) {
-      return res.error("Invalid token", StatusCodes.FORBIDDEN);
+      throw new ForbiddenException("Invalid Token");
     }
   };
 
