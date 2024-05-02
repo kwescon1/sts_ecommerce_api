@@ -13,6 +13,10 @@ const hashPassword = (password) => {
   return bcrypt.hashSync(password, saltRounds);
 };
 
+const verifyPassword = (password, hashedPassword) => {
+  return bcrypt.compareSync(password, hashedPassword);
+};
+
 const generateToken = (user) => {
   const secret = config.jwt.secret;
 
@@ -21,8 +25,8 @@ const generateToken = (user) => {
   const payload = {
     id: user.id,
     username: user.username,
-    isAdmin: user.is_admin,
-    isSuspended: user.is_suspended,
+    is_admin: user.is_admin,
+    is_suspended: user.is_suspended,
   };
 
   return jwt.sign(payload, secret, { expiresIn });
@@ -34,6 +38,7 @@ const verifyToken = (token) => {
 
 module.exports = {
   hashPassword,
+  verifyPassword,
   generateToken,
   verifyToken,
 };
