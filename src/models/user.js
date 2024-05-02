@@ -85,6 +85,11 @@ module.exports = (sequelize, DataTypes) => {
         withPassword: {
           attributes: { include: ["password"] },
         },
+        isSuspended: {
+          where: {
+            is_suspended: true,
+          },
+        },
       },
     }
   );
