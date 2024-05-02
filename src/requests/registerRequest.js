@@ -1,5 +1,4 @@
-const { body, validationResult } = require("express-validator");
-const { StatusCodes } = require("http-status-codes");
+const { body } = require("express-validator");
 const moment = require("moment");
 const ValidationException = require("../exceptions/validationException");
 
@@ -110,18 +109,6 @@ const userValidationRules = () => [
     .withMessage("Email (email) address contains invalid characters."),
 ];
 
-// Middleware to check the validation result
-const validate = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const messages = errors.array().map((error) => error.msg);
-
-    return res.error(messages, StatusCodes.BAD_REQUEST);
-  }
-  next();
-};
-
 module.exports = {
   userValidationRules,
-  validate,
 };
