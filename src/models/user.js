@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // Define associations here, if any
+      User.hasMany(models.RefreshToken, {
+        foreignKey: "user_id",
+        as: "refreshTokens",
+        onDelete: "CASCADE",
+      });
     }
   }
 
@@ -73,6 +78,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      tableName: "users",
       timestamps: true,
       createdAt: "created_at",
       updatedAt: "updated_at",

@@ -2,12 +2,13 @@ const logger = require("../config/logging");
 const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
 const { hashPassword, generateToken } = require("../utilities/utils");
+const TokenService = require("./tokenService");
 
 /**
  * Represents the service for managing registering users.
  * Encapsulates the business logic for auth operations.
  */
-class RegisterService {
+class RegisterService extends TokenService {
   /**
    * Creates a new user with the provided data.
    * @param {Object} data - The data for the new user.
@@ -34,10 +35,13 @@ class RegisterService {
     const newUser = await User.create(data);
 
     // Generate a token for the new user
-    const token = generateToken(newUser);
+    const { accessToken, refreshToken } = this.generateToken(newUser);
+
+    // Store the refresh token in the database
+    await this.storeRefreshToken(refreshToken, newUser?.id);
 
     // return newUser with key user and token with key token
-    return { user: newUser, token };
+    return { user: newUser, accessToken, refreshToken };
   }
 
   #isUsernameUnique = async (username) => {

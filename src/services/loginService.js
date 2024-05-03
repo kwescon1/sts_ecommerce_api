@@ -1,15 +1,14 @@
 const logger = require("../config/logging");
 const ForbiddenException = require("../exceptions/forbiddenException");
-const NotFoundException = require("../exceptions/notFoundException");
 const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
-const { verifyPassword, generateToken } = require("../utilities/utils");
+const TokenService = require("../services/tokenService");
 
 /**
  * Represents the service for managing registering users.
  * Encapsulates the business logic for auth operations.
  */
-class LoginService {
+class LoginService extends TokenService {
   /**
    * Logs a user into the system
    * @param {Object} data - The data for the logged in user.
@@ -30,10 +29,13 @@ class LoginService {
     }
 
     // Generate a token for the user
-    const token = generateToken(user);
+    const { accessToken, refreshToken } = this.generateToken(user);
+
+    // Store the refresh token in the database
+    await this.storeRefreshToken(refreshToken, user?.id);
 
     // return user with key user and token with key token
-    return { user, token };
+    return { user, accessToken, refreshToken };
   }
 
   #isUser = async (username) => {
