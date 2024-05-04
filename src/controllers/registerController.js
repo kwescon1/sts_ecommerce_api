@@ -16,11 +16,12 @@ class RegisterController {
    * @param {Object} res - The Express response object.
    */
   async register(req, res) {
-    const { user, token } = await this.registerService.register(req.body);
+    const { user, accessToken, refreshToken } =
+      await this.registerService.register(req.body);
 
     const userResource = new UserResource(user);
     return res.created(
-      { user: userResource.toJson(), token },
+      { user: userResource.toJson(), accessToken, refreshToken },
       "Registration successful"
     );
   }

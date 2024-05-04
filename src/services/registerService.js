@@ -1,7 +1,7 @@
 const logger = require("../config/logging");
 const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
-const { hashPassword, generateToken } = require("../utilities/utils");
+const { hashPassword } = require("../utilities/utils");
 const TokenService = require("./tokenService");
 
 /**

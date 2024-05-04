@@ -16,18 +16,28 @@ class LoginController {
    * @param {Object} res - The Express response object.
    */
   async login(req, res) {
-    const { user, token } = await this.loginService.login(req.body);
+    const { user, accessToken, refreshToken } = await this.loginService.login(
+      req.body
+    );
 
     const userResource = new UserResource(user);
 
     return res.success(
-      { user: userResource.toJson(), token },
+      { user: userResource.toJson(), accessToken, refreshToken },
       "Login successful"
     );
   }
 
   async logout(req, res) {
-    // const
+    const userId = req?.user?.id;
+
+    success = await this.loginService.logout(userId);
+
+    if (!success) {
+      res.error("Logout Failed");
+    }
+
+    return res.success(success, "Logout successful");
   }
 }
 

@@ -3,7 +3,7 @@ const ForbiddenException = require("../exceptions/forbiddenException");
 const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
 const TokenService = require("../services/tokenService");
-
+const { verifyPassword } = require("../utilities/utils");
 /**
  * Represents the service for managing registering users.
  * Encapsulates the business logic for auth operations.
@@ -36,6 +36,10 @@ class LoginService extends TokenService {
 
     // return user with key user and token with key token
     return { user, accessToken, refreshToken };
+  }
+
+  async logout(userId) {
+    return this.destroyToken(userId);
   }
 
   #isUser = async (username) => {
