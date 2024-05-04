@@ -4,6 +4,8 @@ const RegisterService = require("../services/registerService");
 const RegisterController = require("../controllers/registerController");
 const LoginService = require("../services/loginService");
 const LoginController = require("../controllers/loginController");
+const TokenService = require("../services/tokenService");
+const TokenController = require("../controllers/tokenController");
 
 // Initialize the container
 const container = createContainer();
@@ -17,6 +19,9 @@ container.register({
 
   loginService: asClass(LoginService).scoped(),
   loginController: asClass(LoginController).scoped(),
+
+  tokenService: asClass(TokenService).scoped(),
+  tokenController: asClass(TokenController).scoped(),
 });
 
 module.exports = container;
