@@ -14,15 +14,18 @@ loginRoutes.use((req, res, next) => {
   next();
 });
 
-// Apply the authenticate middleware to all routes except '/login'
-loginRoutes.use(authenticate(["/api/v1/auth/login"]));
-
-// Register new user.
+// login new user.
 loginRoutes.post(
   "/login",
   loginValidationRules(),
   validate,
   asyncHandler((req, res) => req.loginController.login(req, res))
+);
+
+loginRoutes.post(
+  "/logout",
+  authenticate,
+  asyncHandler((req, res) => req.loginController.logout(req, res))
 );
 
 module.exports = loginRoutes;
