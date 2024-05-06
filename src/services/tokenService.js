@@ -66,6 +66,7 @@ class TokenService {
   async destroyToken(userId, accessToken) {
     await RefreshToken.destroy({ where: { user_id: userId } });
     await this.invalidateToken(accessToken);
+    return true;
   }
 
   async invalidateToken(accessToken) {
@@ -74,7 +75,7 @@ class TokenService {
 
     const remainingTime = expiryTime - Math.floor(Date.now() / 1000);
     if (remainingTime > 0) {
-      await this.redisService.set(
+      return await this.redisService.set(
         `blacklist_${accessToken}`,
         true,
         remainingTime

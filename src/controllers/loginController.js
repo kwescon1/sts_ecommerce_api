@@ -38,9 +38,6 @@ class LoginController {
     if (!success) {
       res.error("Logout Failed");
     }
-
-    // invalidate token
-
     return res.success(success, "Logout successful");
   }
 }
