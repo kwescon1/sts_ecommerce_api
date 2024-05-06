@@ -38,8 +38,8 @@ class LoginService extends TokenService {
     return { user, accessToken, refreshToken };
   }
 
-  async logout(userId) {
-    return this.destroyToken(userId);
+  async logout(userId, accessToken) {
+    return this.destroyToken(userId, accessToken);
   }
 
   #isUser = async (username) => {

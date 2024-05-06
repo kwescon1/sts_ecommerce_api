@@ -31,11 +31,15 @@ class LoginController {
   async logout(req, res) {
     const userId = req?.user?.id;
 
-    success = await this.loginService.logout(userId);
+    const accessToken = req.headers["authorization"].split(" ")[1];
+
+    success = await this.loginService.logout(userId, accessToken);
 
     if (!success) {
       res.error("Logout Failed");
     }
+
+    // invalidate token
 
     return res.success(success, "Logout successful");
   }

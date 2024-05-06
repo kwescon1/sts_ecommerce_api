@@ -1,38 +1,36 @@
-const { StatusCodes } = require("http-status-codes");
 const { verifyToken } = require("../utilities/utils");
 const UnauthorizedException = require("../exceptions/unauthorizedException");
 const ForbiddenException = require("../exceptions/forbiddenException");
+const redisClient = require("../services/redisService");
 
-const authenticate =
-  (except = []) =>
-  (req, res, next) => {
-    // If the route is in the except array, skip authentication
-    if (except.includes(req.originalUrl)) {
-      return next();
+const authenticate = async (req, res, next) => {
+  // Retrieve token from header
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
+
+  if (!token) {
+    return next(new UnauthorizedException());
+  }
+
+  // Check if token is blacklisted
+  const isBlacklisted = await redisClient.get(`blacklist_${token}`);
+  if (isBlacklisted) {
+    return next(new UnauthorizedException());
+  }
+
+  try {
+    const decoded = verifyToken(token);
+    req.user = decoded; // Attach user information to request
+
+    // Check if user has been suspended
+    if (req.user?.is_suspended) {
+      return next(new ForbiddenException("Suspended User"));
     }
 
-    // Retrieve token from header
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
-
-    if (!token) {
-      throw new UnauthorizedException();
-    }
-
-    try {
-      const decoded = verifyToken(token);
-      req.user = decoded; //Attach user information to request
-
-      // check if user has been suspended
-
-      if (req.user?.is_suspended) {
-        throw new ForbiddenException("Suspended User");
-      }
-
-      next();
-    } catch (error) {
-      throw new ForbiddenException("Invalid Token");
-    }
-  };
+    next();
+  } catch (error) {
+    next(new ForbiddenException("Invalid Token"));
+  }
+};
 
 module.exports = authenticate;

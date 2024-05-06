@@ -3,8 +3,6 @@ const { userValidationRules } = require("../requests/registerRequest");
 const validate = require("../requests/validateRequest");
 const asyncHandler = require("../utilities/asyncHandler");
 
-const authenticate = require("../middlewares/authenticate");
-
 // Create a new router instance.
 const registerRoutes = express.Router();
 
@@ -14,9 +12,6 @@ registerRoutes.use((req, res, next) => {
   req.registerController = req.container.resolve("registerController");
   next();
 });
-
-// Apply the authenticate middleware to all routes except '/register'
-registerRoutes.use(authenticate(["/api/v1/auth/register"]));
 
 // Register new user.
 registerRoutes.post(
