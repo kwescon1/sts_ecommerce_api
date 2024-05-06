@@ -34,11 +34,6 @@ app.use(ConvertEmptyStringsToNull.handle);
 app.use(TrimStringsMiddleware.handle);
 app.use(new AttachContainerMiddleware(container).handle);
 
-// Define a simple route
-// app.get("/", (req, res) => {
-//   res.send("It is working");
-// });
-
 // Route groupings
 app.use("/api/v1", router);
 
