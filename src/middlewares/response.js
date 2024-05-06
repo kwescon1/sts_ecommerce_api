@@ -7,6 +7,7 @@ function responseMacro(req, res, next) {
     return res.status(StatusCodes.OK).json({
       success: true,
       data: data ?? null,
+      message: message,
     });
   };
 
