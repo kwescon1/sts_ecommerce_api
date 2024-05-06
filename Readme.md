@@ -235,8 +235,8 @@ Authenticates a user by verifying their username and password, and returns an ac
         "is_admin": false,
         "is_suspended": false
       },
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgyZWI0MjI3LTNlNTctNDdmNi1hOWEwLTkyZTk3NWJjOGY2OSIsInVzZXJuYW1lIjoidXNlcjciLCJpc19hZG1pbiI6ZmFsc2UsImlzX3N1c3BlbmRlZCI6ZmFsc2UsImlhdCI6MTcxNTAwNzk2MCwiZXhwIjoxNzE1MDA4ODYwfQ.P7wqOR6tK5lvhiC01dBIM8kO415mqRgtB92xVw5YQt0",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgyZWI0MjI3LTNlNTctNDdmNi1hOWEwLTkyZTk3NWJjOGY2OSIsImlhdCI6MTcxNTAwNzk2MCwiZXhwIjoxNzE1MDk0MzYwfQ.K_1cQWYB2YhEQDGJlme8SvzV4g9lQqwCFNSKIjb6oZg"
+      "accessToken": "<access-token>",
+      "refreshToken": "<refresh-token>"
     }
   }
   ```
@@ -308,6 +308,47 @@ These sections outline how users interact with the login and logout functionalit
 - POST `/api/users/reset-password` - Reset password
 - PUT `/api/users/address` - Add/update delivery address
 - DELETE `/api/users` - Delete user account
+
+---
+
+## Token Management
+
+### Refreshing Access Tokens
+
+**Endpoint: POST `/api/v1/auth/refresh-token`**
+
+- **Purpose**: Allows users to refresh their expired access tokens using a valid refresh token.
+- **Authorization**: No authorization is required to access this endpoint as it is specifically for renewing access tokens.
+
+#### **Request Body**
+
+- `refresh_token`: A string representing the refresh token. Required
+
+#### Successful Response:
+
+A successful request returns a JSON object containing a new access token and refresh token. The response indicates that the user can continue to interact with the API using the new access token.
+
+```json
+{
+  "success": true,
+  "data": {
+    "accessToken": "<new_access_token>",
+    "refreshToken": "<new_refresh_token>"
+  },
+  "message": "Token generated successfully."
+}
+```
+
+#### Error Response:
+
+If the provided refresh token is invalid, missing, or has expired, the API returns an error response. This response indicates that the user must log in again or provide a valid refresh token to continue.
+
+```json
+{
+  "success": false,
+  "error": "Invalid refresh token"
+}
+```
 
 ### Product Interaction
 
