@@ -1,3 +1,4 @@
+const { StatusCodes } = require("http-status-codes");
 const logger = require("../config/logging");
 const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
@@ -19,12 +20,18 @@ class RegisterService extends TokenService {
 
     //verify if username does not already exist
     if (!(await this.#isUsernameUnique(username))) {
-      throw new ValidationException("Username already exists");
+      throw new ValidationException(
+        "Username already exists",
+        StatusCodes.CONFLICT
+      );
     }
 
     // verify if email is unique
     if (!(await this.#isEmailUnique(email))) {
-      throw new ValidationException("Email already exists");
+      throw new ValidationException(
+        "Email already exists",
+        StatusCodes.CONFLICT
+      );
     }
 
     const hashedPassword = hashPassword(password);
