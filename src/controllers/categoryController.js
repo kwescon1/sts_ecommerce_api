@@ -51,7 +51,10 @@ class CategoryController {
   }
 
   async deleteCategory(res, categoryId) {
-    return res.success(await this.categoryService.deleteCategory(categoryId));
+    return res.success(
+      await this.categoryService.deleteCategory(categoryId),
+      "Category deleted successfully"
+    );
   }
 }
 
