@@ -148,8 +148,8 @@ Registers a new user on the Crimson Inc. platform. This endpoint validates user 
         "is_admin": false,
         "is_suspended": false
       },
-      "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgyZWI0MjI3LTNlNTctNDdmNi1hOWEwLTkyZTk3NWJjOGY2OSIsInVzZXJuYW1lIjoidXNlcjciLCJpc19hZG1pbiI6ZmFsc2UsImlzX3N1c3BlbmRlZCI6ZmFsc2UsImlhdCI6MTcxNTAwNjY5MSwiZXhwIjoxNzE1MDA3NTkxfQ.2Cjv7mv2M8in5DDv2dIbQ1duSqzQrU5uBpNUXiSdVQc",
-      "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgyZWI0MjI3LTNlNTctNDdmNi1hOWEwLTkyZTk3NWJjOGY2OSIsImlhdCI6MTcxNTAwNjY5MSwiZXhwIjoxNzE1MDkzMDkxfQ.Jyz3chXLDnBTjuq9sq49YLxrnS3YwJl1sZSdY9_mHwI"
+      "accessToken": "<access-token>",
+      "refreshToken": "<refresh-token>"
     }
   }
   ```
@@ -349,6 +349,273 @@ If the provided refresh token is invalid, missing, or has expired, the API retur
   "error": "Invalid refresh token"
 }
 ```
+
+---
+
+## Category Management
+
+### **Store Category**
+
+#### **Endpoint**
+
+`POST /api/v1/categories`
+
+#### **Description**
+
+Creates a new category in the system.
+
+#### **Authentication**
+
+Requires authentication and administrator privileges.
+
+#### **Request Body**
+
+- `name`: The name of the category. Required. Must be unique and not exceed 255 characters.
+- `description`: (Optional) Description of the category.
+
+#### **Sample Request**
+
+```json
+{
+  "name": "Electronics",
+  "description": "Category for electronic products"
+}
+```
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 201 Created
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "Category created",
+    "data": {
+      "category": {
+        "id": "82eb4227-3e57-47f6-a9a0-92e975bc8f69",
+        "name": "Electronics",
+        "description": "Category for electronic products"
+      }
+    }
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 400 Bad Request
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": ["Category name is required."]
+  }
+  ```
+
+### **Update Category**
+
+#### **Endpoint**
+
+`PUT /api/v1/categories/:id`
+
+#### **Description**
+
+Updates an existing category.
+
+#### **Authentication**
+
+Requires authentication and administrator privileges.
+
+#### **Request Body**
+
+- `name`: The name of the category. Required. Must be unique and not exceed 255 characters.
+- `description`: (Optional) Description of the category.
+
+#### **Sample Request**
+
+```json
+{
+  "name": "Books",
+  "description": "Category for books and literature"
+}
+```
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "Category updated",
+    "data": {
+      "category": {
+        "id": "82eb4227-3e57-47f6-a9a0-92e975bc8f69",
+        "name": "Books",
+        "description": "Category for books and literature"
+      }
+    }
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 400 Bad Request
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": ["Name must not exceed 255 characters."]
+  }
+  ```
+
+### **Delete Category**
+
+#### **Endpoint**
+
+`DELETE /api/v1/categories/:id`
+
+#### **Description**
+
+Deletes an existing category.
+
+#### **Authentication**
+
+Requires authentication and administrator privileges.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "Category deleted successfully",
+    "data": true
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 403 Forbidden
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "Category cannot be deleted as it has associated products"
+  }
+  ```
+
+### **Get Categories**
+
+#### **Endpoint**
+
+`GET /api/v1/categories`
+
+#### **Description**
+
+Retrieves all categories from the system.
+
+#### **Authentication**
+
+Requires authentication.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "Categories retrieved successfully",
+    "data": {
+      "categories": [
+        {
+          "id": "1",
+          "name": "Electronics",
+          "description": "Category for electronic products"
+        },
+        {
+          "id": "2",
+          "name": "Books",
+          "description": "Category for books and literature"
+        }
+      ]
+    }
+  }
+  ```
+
+### **Get Category by ID**
+
+#### **Endpoint**
+
+`GET /api/v1/categories/:id`
+
+#### **Description**
+
+Retrieves a single category by its ID.
+
+#### **Authentication**
+
+Requires authentication.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "Category retrieved successfully",
+    "data": {
+      "category": {
+        "id": "1",
+        "name": "Electronics",
+        "description": "Category for electronic products"
+      }
+    }
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 404 Not Found
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "Category not found"
+  }
+  ```
+
+---
 
 ### Product Interaction
 
