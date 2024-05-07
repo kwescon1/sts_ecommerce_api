@@ -1,11 +1,11 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Op } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     static associate(models) {
-      // Define associations here, if any
       Category.hasMany(models.Product, {
-        foreignKey: "categor_id",
+        foreignKey: "category_id",
         as: "products",
       });
     }
@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       description: {
         type: DataTypes.TEXT,
       },
+      deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       sequelize,
@@ -37,11 +41,20 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "updated_at",
       defaultScope: {
         attributes: {
-          exclude: ["created_at", "updated_at"],
+          exclude: ["created_at", "updated_at", "deleted_at"],
         },
       },
+      paranoid: true, // Enable soft delete
+      deletedAt: "deleted_at",
       scopes: {
-        // Add additional scopes here
+        withDates: {
+          attributes: { include: ["created_at", "updated_at", "deleted_at"] },
+        },
+        isDeleted: {
+          where: {
+            deleted_at: { [Op.not]: null },
+          },
+        },
       },
     }
   );

@@ -7,6 +7,8 @@ const LoginController = require("../controllers/loginController");
 const TokenService = require("../services/tokenService");
 const TokenController = require("../controllers/tokenController");
 const RedisService = require("../services/redisService");
+const CategoryService = require("../services/categoryService");
+const CategoryController = require("../controllers/categoryController");
 
 // Initialize the container
 const container = createContainer();
@@ -25,6 +27,9 @@ container.register({
 
   tokenService: asClass(TokenService).scoped(),
   tokenController: asClass(TokenController).scoped(),
+
+  categoryService: asClass(CategoryService).scoped(),
+  categoryController: asClass(CategoryController).scoped(),
 });
 
 module.exports = container;

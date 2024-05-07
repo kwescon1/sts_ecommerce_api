@@ -1,5 +1,4 @@
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("categories", {
@@ -16,6 +15,11 @@ module.exports = {
       },
       description: {
         type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      deleted_at: {
+        // Add the deletedAt column
+        type: Sequelize.DATE,
         allowNull: true,
       },
       created_at: {
