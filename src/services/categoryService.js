@@ -1,5 +1,6 @@
 const logger = require("../config/logging");
 const ForbiddenException = require("../exceptions/forbiddenException");
+const NotFoundException = require("../exceptions/notFoundException");
 const ValidationException = require("../exceptions/validationException");
 const { Category, Product } = require("../models");
 const { Op } = require("sequelize");
@@ -63,7 +64,13 @@ class CategoryService {
   }
 
   async getCategory(categoryId) {
-    return await Category.findByPk(categoryId);
+    const category = this.category(categoryId);
+
+    if (!category) {
+      throw new NotFoundException("Category not found");
+    }
+
+    return category;
   }
 
   async deleteCategory(categoryId) {
@@ -71,6 +78,10 @@ class CategoryService {
     const category = await Category.findByPk(categoryId, {
       include: [{ model: Product, as: "products" }],
     });
+
+    if (!category) {
+      throw new NotFoundException("Category not found");
+    }
 
     if (category.products.length > 0) {
       throw new ForbiddenException(

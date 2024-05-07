@@ -39,15 +39,18 @@ class CategoryController {
   }
 
   async getCategories(res) {
-    return res.success({
-      categories: await this.categoryService.getCategories(),
-    });
+    return res.success(
+      {
+        categories: await this.categoryService.getCategories(),
+      },
+      "Categories retrieved successfully"
+    );
   }
 
   async getCategory(res, categoryId) {
     const category = await this.categoryService.getCategory(categoryId);
 
-    res.success({ category: category });
+    res.success({ category: category }, "Category retrieved successfully");
   }
 
   async deleteCategory(res, categoryId) {
