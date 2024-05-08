@@ -42,7 +42,7 @@ services:
     container_name: sts_db
     image: mysql:8.0
     ports:
-      - "${DB_PORT}:3306"
+      - "3307:3306"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
