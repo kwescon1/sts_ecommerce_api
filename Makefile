@@ -34,7 +34,7 @@ build: create-env ## Build defined images
 force_start: ## Force a restart of defined services
 	@docker-compose up -d --force-recreate
 
-fresh: modify_permission build force_start ## A fresh recreate of all containers
+fresh: build force_start ## A fresh recreate of all containers
 
 ps: ## Show containers
 	@docker-compose ps
@@ -49,3 +49,11 @@ logs: ## Follow logs from all containers
 	@docker-compose logs -f
 
 
+migrate: ## Migrate db schemas
+	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash -c "npx sequelize-cli db:migrate"
+
+undo_migrate: ## Undo previous migration
+	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash -c "npx sequelize-cli db:migrate:undo"
+
+seed: ## Seed data into db
+	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash -c "npx sequelize-cli db:seed:all"
