@@ -99,4 +99,31 @@ profileRoutes.put(
     return req.profileController.updateUserProfile(res, userId, data, file);
   })
 );
+
+profileRoutes.get(
+  "/:id/profile",
+  authenticate,
+  asyncHandler((req, res, next) => {
+    const userId = req?.params?.id;
+
+    if (req?.user?.id != userId) {
+      next(new ForbiddenException());
+    }
+    return req.profileController.getUserProfile(res, userId);
+  })
+);
+
+profileRoutes.delete(
+  "/:id/profile",
+  authenticate,
+  asyncHandler((req, res, next) => {
+    const userId = req?.params?.id;
+
+    if (req?.user?.id != userId) {
+      next(new ForbiddenException());
+    }
+    return req.profileController.deleteUserAccount(res, userId);
+  })
+);
+
 module.exports = profileRoutes;

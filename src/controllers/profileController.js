@@ -52,6 +52,30 @@ class ProfileController {
       "User unsuspended successfully"
     );
   }
+
+  async updateUserProfile(res, userId, data, file) {
+    const updatedUser = await this.profileService.updateUserProfile(
+      data,
+      userId,
+      file
+    );
+
+    const userResource = new UserResource(updatedUser);
+
+    return res.success({ user: userResource.toJson() }, "User Profile Updated");
+  }
+
+  async getUserProfile(res, userId) {
+    const user = await this.profileService.getUserProfile(userId);
+
+    return res.success(user, "User Retrieved Successfully");
+  }
+
+  async deleteUserAccount(res, userId) {
+    const deletedUser = await this.profileService.deleteUserAccount(userId);
+
+    return res.success(deletedUser, "User Account Deleted");
+  }
 }
 
 module.exports = ProfileController;

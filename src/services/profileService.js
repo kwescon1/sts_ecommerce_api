@@ -125,6 +125,37 @@ class ProfileService {
 
     return await User.scope("withImageIdentifier").findByPk(userId);
   }
+
+  async getUserProfile(userId) {
+    const user = await User.scope(["defaultScope", "withCreatedAt"]).findByPk(
+      userId,
+      {
+        include: "address",
+      }
+    );
+
+    if (!user) {
+      throw new ConflictException("User not found");
+    }
+
+    return user;
+  }
+
+  async deleteUserAccount(userId) {
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      throw new ConflictException("User not found");
+    }
+
+    if (user && user?.is_suspended) {
+      throw new ForbiddenException("Suspended user");
+    }
+
+    await User.destroy({ where: { id: userId } });
+
+    return true;
+  }
 }
 
 module.exports = ProfileService;
