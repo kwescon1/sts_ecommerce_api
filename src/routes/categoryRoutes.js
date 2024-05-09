@@ -36,7 +36,7 @@ categoryRoutes.put(
   asyncHandler((req, res) => {
     const categoryId = req.params.id;
 
-    req.categoryController.updateCategory(req, res, categoryId);
+    return req.categoryController.updateCategory(req, res, categoryId);
   })
 );
 
@@ -51,7 +51,7 @@ categoryRoutes.get(
   authenticate,
   asyncHandler((req, res) => {
     const categoryId = req.params.id;
-    req.categoryController.getCategory(res, categoryId);
+    return req.categoryController.getCategory(res, categoryId);
   })
 );
 
@@ -61,7 +61,7 @@ categoryRoutes.delete(
   isAdmin,
   asyncHandler((req, res) => {
     const categoryId = req.params.id;
-    req.categoryController.deleteCategory(res, categoryId);
+    return req.categoryController.deleteCategory(res, categoryId);
   })
 );
 

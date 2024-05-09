@@ -2,12 +2,12 @@ const logger = require("../config/logging");
 const ForbiddenException = require("../exceptions/forbiddenException");
 const NotFoundException = require("../exceptions/notFoundException");
 const ValidationException = require("../exceptions/validationException");
-const { Category, Product } = require("../models");
+const { Category } = require("../models");
 const { Op } = require("sequelize");
 
 /**
  * Represents the service for managing categories.
- * Encapsulates the business logic for auth operations.
+ * Encapsulates the business logic for profile operations.
  */
 class CategoryService {
   /**
@@ -75,8 +75,9 @@ class CategoryService {
 
   async deleteCategory(categoryId) {
     // Check if the category has associated products
+
     const category = await Category.findByPk(categoryId, {
-      include: [{ model: Product, as: "products" }],
+      include: "products",
     });
 
     if (!category) {
