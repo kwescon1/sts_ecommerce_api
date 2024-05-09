@@ -575,7 +575,7 @@ Requires authentication.
   }
   ```
 
-  ### **Get User Profile**
+### **Get User Profile**
 
 #### **Endpoint**
 
