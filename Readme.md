@@ -575,6 +575,120 @@ Requires authentication.
   }
   ```
 
+  ### **Get User Profile**
+
+#### **Endpoint**
+
+`GET /api/v1/user/:id/profile`
+
+#### **Description**
+
+Retrieves information about a user account
+
+#### **Authentication**
+
+Requires authentication.
+
+#### **Request Parameters**
+
+- `id`: The id of the user account to be retrieved.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": "c30d3d7b-c025-4d06-bef6-3709bb4b9e5c",
+      "first_name": "Franque",
+      "last_name": "Armoako",
+      "dob": "1990-01-01",
+      "username": "franque_armoako",
+      "email": "franque_armoako@example.com",
+      "image_url": "/images/user.jpeg",
+      "is_admin": true,
+      "is_suspended": false,
+      "created_at": "2024-05-09T21:59:35.000Z",
+      "address": {
+        "id": 1,
+        "label": "Billing",
+        "street_address": "32 Hurstleigh Gardens",
+        "city": "London",
+        "state": "Washington DC",
+        "postal_code": "IG5 0RQ",
+        "country": "USA"
+      }
+    },
+    "message": "User Retrieved Successfully"
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 403 Fobbiden Request
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "Forbidden Action"
+  }
+  ```
+
+### **Delete User Profile**
+
+#### **Endpoint**
+
+`DELETE /api/v1/user/:id/profile`
+
+#### **Description**
+
+Deletes a user account from the system
+
+#### **Authentication**
+
+Requires authentication.
+
+#### **Request Parameters**
+
+- `id`: The id of the user account to be deleted.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "data": true,
+    "message": "User Account Deleted"
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 403 Fobbiden Request
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "Forbidden Action"
+  }
+  ```
+
 ### **Suspend User Account**
 
 #### **Endpoint**
