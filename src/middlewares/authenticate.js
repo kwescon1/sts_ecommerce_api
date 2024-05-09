@@ -2,6 +2,7 @@ const { verifyToken } = require("../utilities/utils");
 const UnauthorizedException = require("../exceptions/unauthorizedException");
 const ForbiddenException = require("../exceptions/forbiddenException");
 const redisClient = require("../services/redisService");
+const jwt = require("jsonwebtoken");
 
 const authenticate = async (req, res, next) => {
   // Retrieve token from header
@@ -29,7 +30,13 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(new ForbiddenException("Invalid Token"));
+    if (error instanceof jwt.TokenExpiredError) {
+      // Handle expired token error
+      return next(new UnauthorizedException());
+    } else {
+      // Handle other errors
+      return next(new ForbiddenException("Invalid Token"));
+    }
   }
 };
 
