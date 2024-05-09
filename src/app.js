@@ -4,6 +4,7 @@ const config = require("./config/config.js");
 
 const express = require("express");
 const app = express();
+const path = require("path");
 
 app.set("trust proxy", 1);
 
@@ -33,6 +34,10 @@ app.use(responseMacro);
 app.use(ConvertEmptyStringsToNull.handle);
 app.use(TrimStringsMiddleware.handle);
 app.use(new AttachContainerMiddleware(container).handle);
+
+// Serve static files
+const publicPath = path.join(__dirname, "..", "public");
+app.use(express.static(publicPath));
 
 // Route groupings
 app.use("/api/v1", router);
