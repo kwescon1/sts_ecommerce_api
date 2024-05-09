@@ -72,6 +72,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: "/images/user.jpeg",
       },
+      image_identifier: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       is_admin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -90,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "updated_at",
       defaultScope: {
         attributes: {
-          exclude: ["password", "created_at", "updated_at"],
+          exclude: ["password", "created_at", "updated_at", "image_identifier"],
         },
       },
       scopes: {
@@ -101,6 +105,9 @@ module.exports = (sequelize, DataTypes) => {
           where: {
             is_suspended: true,
           },
+        },
+        withImageIdentifier: {
+          attributes: { include: ["image_identifier"] },
         },
       },
     }
