@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "refreshTokens",
         onDelete: "CASCADE",
       });
+
+      User.hasOne(models.Address, {
+        foreignKey: "user_id",
+        as: "address",
+        onDelete: "CASCADE",
+      });
     }
   }
 
