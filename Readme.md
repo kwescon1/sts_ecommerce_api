@@ -615,8 +615,6 @@ Requires authentication as an admin user.
   }
   ```
 
-````
-
 - **Error Response:**
 
   **Code:** 404 Not Found
@@ -1236,4 +1234,7 @@ This project is licensed under the MIT License - see the `LICENSE.md` file for d
 ```
 
 ```
-````
+
+```
+
+```
