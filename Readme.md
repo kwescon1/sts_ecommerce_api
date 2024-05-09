@@ -497,21 +497,41 @@ Requires authentication.
   }
   ``` -->
 
-### **Update User General Profile**
+### **User Profile Update**
 
-<!-- #### Endpoint
+#### **Endpoint**
 
-`GET /api/v1/user/profile/address`
+`PUT /api/v1/user/:id/profile/update`
 
-#### Description
+#### **Description**
 
-Retrieves the user's address.
+Updates the profile information of a user.
 
-#### Authentication
+#### **Authentication**
 
 Requires authentication.
 
-#### Responses
+#### **Request Body**
+
+- `first_name`: The updated first name of the user. Optional.
+- `last_name`: The updated last name of the user. Optional.
+- `username`: The updated username of the user. Optional.
+- `email`: The updated email address of the user. Optional.
+- `image`: The updated profile image of the user. Optional.
+
+#### **Sample Request**
+
+```json
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "username": "johndoe2024",
+  "email": "johndoe@example.com",
+  "image": "<base64-encoded-image>"
+}
+```
+
+#### **Responses**
 
 - **Success Response:**
 
@@ -522,33 +542,32 @@ Requires authentication.
   ```json
   {
     "success": true,
+    "message": "User profile updated successfully",
     "data": {
-      "address": {
-        "id": 1,
-        "label": "Billing",
-        "street_address": "35 Bibiani street",
-        "city": "London",
-        "state": "Washington DC",
-        "postal_code": "BBQ JJJ",
-        "country": "USA"
+      "user": {
+        "id": "6358581b-7bc0-4adc-a8b1-0fca7b4d6079",
+        "first_name": "John",
+        "last_name": "Doe",
+        "username": "johndoe2024",
+        "email": "johndoe@example.com",
+        "image_url": "http:/images/johndoe2024_profile.jpeg"
       }
-    },
-    "message": "Address retrieved successfully"
+    }
   }
   ```
 
 - **Error Response:**
 
-  **Code:** 404 Not Found
+  **Code:** 400 Bad Request
 
   **Content:**
 
   ```json
   {
     "success": false,
-    "error": "User address not found"
+    "error": "Invalid request body"
   }
-  ``` -->
+  ```
 
 ### **Suspend User Account**
 
@@ -589,6 +608,8 @@ Requires authentication as an admin user.
     }
   }
   ```
+
+````
 
 - **Error Response:**
 
@@ -1209,3 +1230,4 @@ This project is licensed under the MIT License - see the `LICENSE.md` file for d
 ```
 
 ```
+````
