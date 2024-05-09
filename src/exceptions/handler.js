@@ -20,7 +20,7 @@ class ErrorHandler {
       url: req.originalUrl,
       ip: req.ip,
       error: err.message,
-      stack: err.stack.split("\n")[0], // Getting the first line of the stack trace
+      stack: err.stack, // Getting the first line of the stack trace
     };
 
     // Log the error details
@@ -44,6 +44,10 @@ class ErrorHandler {
         res.error(err.message, err.status);
         break;
       // Add more cases as needed for other custom errors
+
+      case "ConflictException":
+        res.error(err.message, err.status);
+        break;
       default:
         // Handle unexpected errors
         res.error(
