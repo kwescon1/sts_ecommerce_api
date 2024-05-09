@@ -24,6 +24,7 @@ class UserResource {
       email: this.user.email,
       dob: this.user.dob,
       image_url: this.user.image_url,
+      image_identifier: this.user.image_identifier,
       is_admin: this.user.is_admin,
       is_suspended: this.user.is_suspended,
     };

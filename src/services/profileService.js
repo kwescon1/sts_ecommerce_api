@@ -11,6 +11,9 @@ const { Op, where } = require("sequelize");
  * Encapsulates the business logic for profile operations.
  */
 class ProfileService {
+  constructor({ imageService }) {
+    this.imageService = imageService;
+  }
   /**
    * Stores address
    * @param {Object} data - The data for stored address.
@@ -101,6 +104,22 @@ class ProfileService {
 
     // Return the unsuspended user
     return user;
+  }
+
+  async updateUserProfile(data, userId, file) {
+    if (file) {
+      data.image_url = await this.imageService.uploadFile(file);
+    }
+
+    let [updatedRowsCount] = await User.update(data, { where: { id: userId } });
+
+    if (updatedRowsCount === 0) {
+      throw new ConflictException("Failed to update user profile");
+    }
+
+    await User.update(data, { where: { id: userId } });
+
+    return await User.scope("withImageIdentifier").findByPk(userId);
   }
 }
 
