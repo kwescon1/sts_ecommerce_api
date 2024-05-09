@@ -44,6 +44,13 @@ const config = {
     accessExpiry: process.env.JWT_ACCESS_EXPIRY,
     refreshExpiry: process.env.JWT_REFRESH_EXPIRY,
   },
+  cloudinary: {
+    url: process.env.CLOUDINARY_URL,
+    key: process.env.CLOUDINARY_API_KEY,
+    secret: process.env.CLOUDINARY_API_SECRET,
+    name: process.env.CLOUDINARY_CLOUD_NAME,
+    folder: process.env.CLOUDINARY_STORAGE_FOLDER,
+  },
 };
 
 module.exports = config;
