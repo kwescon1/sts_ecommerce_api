@@ -84,6 +84,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      deleted_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
     },
     {
       sequelize,
@@ -92,15 +96,27 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       createdAt: "created_at",
       updatedAt: "updated_at",
+      paranoid: true,
+      deletedAt: "deleted_at",
       defaultScope: {
         attributes: {
-          exclude: ["password", "created_at", "updated_at", "image_identifier"],
+          exclude: [
+            "password",
+            "created_at",
+            "updated_at",
+            "deleted_at",
+            "image_identifier",
+          ],
         },
       },
       scopes: {
         withPassword: {
           attributes: { include: ["password"] },
         },
+        withCreatedAt: {
+          attributes: { include: ["created_at"] },
+        },
+
         isSuspended: {
           where: {
             is_suspended: true,

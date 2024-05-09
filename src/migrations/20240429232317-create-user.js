@@ -62,6 +62,11 @@ module.exports = {
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
         onUpdate: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
+      deleted_at: {
+        // Add the deletedAt column
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
