@@ -108,7 +108,11 @@ class ProfileService {
 
   async updateUserProfile(data, userId, file) {
     if (file) {
-      data.image_url = await this.imageService.uploadFile(file);
+      const { secure_url, public_id } = await this.imageService.uploadFile(
+        file
+      );
+      data.image_url = secure_url;
+      data.public_id = public_id;
     }
 
     let [updatedRowsCount] = await User.update(data, { where: { id: userId } });
