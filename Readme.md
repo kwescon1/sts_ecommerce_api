@@ -450,9 +450,9 @@ Requires authentication.
   }
   ```
 
-  ### **Update User Password**
+### **Update User Password**
 
-#### Endpoint
+#### Endpoint -- TODO
 
 <!-- `GET /api/v1/user/profile/address` -->
 
@@ -1011,8 +1011,6 @@ Requires authentication.
   ```
 
 ---
-
-Sure, here's a continuation of your README with the sections you requested:
 
 ### Product Interaction
 
