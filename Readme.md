@@ -23,6 +23,7 @@ Crimson Backend is an API for a new e-commerce platform developed for Crimson In
 ### Prerequisites
 
 - Docker
+- make
 
 ### Installing
 
@@ -30,67 +31,70 @@ Clone the repository to your local machine:
 
 ```
 
-git clone https://github.com/yourusername/crimson-backend.git
-cd crimson-backend
+git clone https://github.com/yourusername/sts_ecommerce_api.git
 
-```
-
-Install the necessary packages:
-
-```
-
-npm install
+cd sts_ecommerce_api.git
 
 ```
 
 ### Configuration
 
-Create a `.env` file in the root directory and add the following environment variables:
+Create a .env file based off the .env.example file and add fill the necessary keys
 
 ```
 
-DB_NAME=crimsondb
-DB_USER=your_mysql_user
-DB_PASS=your_mysql_password
-DB_HOST=localhost
-PORT=5000
-SECRET_KEY=your_secret_key_for_jwt
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
 
-```
+FIRST_NAME=
+LAST_NAME=
+USERNAME=
+DOB=
+PASSWORD=
+EMAIL=
 
-Update `config/config.json` with your database credentials for Sequelize:
+JWT_SECRET=
+JWT_ACCESS_EXPIRY=
+JWT_REFRESH_EXPIRY=
 
-```json
-{
-  "development": {
-    "username": "your_mysql_user",
-    "password": "your_mysql_password",
-    "database": "crimsondb",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-}
 ```
 
 ### Running the Application
 
+Installing the application
+
+```
+make setup
+```
+
+Forcing a reinstall of the application
+
+```
+make fresh
+```
+
 Run the migrations:
 
 ```
-npx sequelize db:migrate
+make migrate
 ```
 
-Start the server:
+Running the seeders:
 
 ```
-npm start
+make seed
 ```
 
-The server should now be running on `http://localhost:5000`.
+The server should now be running on `http://localhost:3000`.
 
 ## API Endpoints
 
-### **User Registration**
+### **User Management**
+
+---
+
+### User Registration
 
 #### **Endpoint**
 
@@ -302,12 +306,249 @@ Requires an `Authorization` header with a valid Bearer token.
 - The `accessToken` provided on login is required to be sent in the `Authorization` header as a Bearer token for logging out.
 - Refresh tokens are managed in a way that supports token rotation and limits the lifespan of refresh tokens to reduce security risks.
 
-These sections outline how users interact with the login and logout functionalities, providing clear instructions and responses for API consumers.
+### **User Profile**
 
-- PUT `/api/users/update` - Update user profile
-- POST `/api/users/reset-password` - Reset password
-- PUT `/api/users/address` - Add/update delivery address
-- DELETE `/api/users` - Delete user account
+---
+
+### **Add or Update User Address**
+
+This documentation section outlines the endpoints and functionality related to managing user addresses in the Crimson Backend API:
+
+#### **Endpoint**
+
+`POST /api/v1/user/profile/address`
+
+#### **Description**
+
+Allows users to add or update their delivery address. If the user already has an address, it will be updated; otherwise, a new address will be added to their profile.
+
+#### **Authentication**
+
+Requires authentication.
+
+#### **Request Body**
+
+- `street_address`: The street address of the user's delivery address. Required.
+- `city`: The city of the user's delivery address. Required.
+- `postal_code`: The postal code of the user's delivery address. Required.
+- `country`: The country of the user's delivery address. Required. Must be a string.
+- `label`: (Optional) A label for the address (e.g., Home, Work).
+- `state`: (Optional) The state of the user's delivery address.
+
+#### **Sample Request**
+
+```json
+{
+  "street_address": "25 ABC house",
+  "city": "Accra",
+  "state": "Greater Washington",
+  "postal_code": "GH-12356",
+  "country": "USA"
+}
+```
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "data": {
+      "address": {
+        "id": 1,
+        "street_address": "25 ABC house",
+        "city": "Accra",
+        "state": "Greater Washington",
+        "postal_code": "GH-12356",
+        "country": "USA"
+      }
+    },
+    "message": "User Address Updated"
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 400 Bad Request
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": [
+      "Street address is required",
+      "City is required",
+      "Postal code is required",
+      "Country is required",
+      "Country must be a string"
+    ]
+  }
+  ```
+
+### **Retrieve User Address**
+
+#### Endpoint
+
+`GET /api/v1/user/profile/address`
+
+#### Description
+
+Retrieves the user's address.
+
+#### Authentication
+
+Requires authentication.
+
+#### Responses
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "data": {
+      "address": {
+        "id": 1,
+        "label": "Billing",
+        "street_address": "35 Bibiani street",
+        "city": "London",
+        "state": "Washington DC",
+        "postal_code": "BBQ JJJ",
+        "country": "USA"
+      }
+    },
+    "message": "Address retrieved successfully"
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 404 Not Found
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "User address not found"
+  }
+  ```
+
+  ### **Update User Password**
+
+#### Endpoint
+
+<!-- `GET /api/v1/user/profile/address` -->
+
+<!-- #### Description
+
+Retrieves the user's address.
+
+#### Authentication
+
+Requires authentication.
+
+#### Responses
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "data": {
+      "address": {
+        "id": 1,
+        "label": "Billing",
+        "street_address": "35 Bibiani street",
+        "city": "London",
+        "state": "Washington DC",
+        "postal_code": "BBQ JJJ",
+        "country": "USA"
+      }
+    },
+    "message": "Address retrieved successfully"
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 404 Not Found
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "User address not found"
+  }
+  ``` -->
+
+### **Update User General Profile**
+
+<!-- #### Endpoint
+
+`GET /api/v1/user/profile/address`
+
+#### Description
+
+Retrieves the user's address.
+
+#### Authentication
+
+Requires authentication.
+
+#### Responses
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "data": {
+      "address": {
+        "id": 1,
+        "label": "Billing",
+        "street_address": "35 Bibiani street",
+        "city": "London",
+        "state": "Washington DC",
+        "postal_code": "BBQ JJJ",
+        "country": "USA"
+      }
+    },
+    "message": "Address retrieved successfully"
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 404 Not Found
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "User address not found"
+  }
+  ``` -->
 
 ---
 
@@ -616,6 +857,196 @@ Requires authentication.
   ```
 
 ---
+
+Sure, here's a continuation of your README with the sections you requested:
+
+### Product Interaction
+
+#### Viewing Products
+
+- **Endpoint**: `GET /api/products`
+- **Description**: Retrieves all products available in the platform.
+- **Authentication**: Not required.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: JSON array of product objects.
+  - **Error Response**:
+    - **Code**: 500 Internal Server Error
+    - **Content**: Error message indicating server failure.
+
+#### Sorting
+
+- **Endpoint**: `GET /api/products?sort=<attribute>`
+- **Description**: Sorts products based on the specified attribute (e.g., price, name).
+- **Authentication**: Not required.
+- **Parameters**:
+  - `sort`: The attribute to sort the products by.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: JSON array of sorted product objects.
+  - **Error Response**:
+    - **Code**: 400 Bad Request
+    - **Content**: Error message indicating invalid sort attribute.
+
+#### Searching
+
+- **Endpoint**: `GET /api/products?search=<keywords>`
+- **Description**: Searches for products based on the provided keywords.
+- **Authentication**: Not required.
+- **Parameters**:
+  - `search`: Keywords to search for in product names or descriptions.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: JSON array of product objects matching the search criteria.
+  - **Error Response**:
+    - **Code**: 400 Bad Request
+    - **Content**: Error message indicating invalid search query.
+
+#### Adding to Cart
+
+- **Endpoint**: `POST /api/cart/add`
+- **Description**: Adds a product to the user's shopping cart.
+- **Authentication**: Required.
+- **Request Body**:
+  - `product_id`: The ID of the product to add to the cart.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: Success message confirming product added to cart.
+  - **Error Response**:
+    - **Code**: 404 Not Found
+    - **Content**: Error message indicating product not found.
+
+#### Adding to Wishlist
+
+- **Endpoint**: `POST /api/wishlist/add`
+- **Description**: Adds a product to the user's wishlist for future consideration.
+- **Authentication**: Required.
+- **Request Body**:
+  - `product_id`: The ID of the product to add to the wishlist.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: Success message confirming product added to wishlist.
+  - **Error Response**:
+    - **Code**: 404 Not Found
+    - **Content**: Error message indicating product not found.
+
+### Order Management
+
+#### Placing Orders
+
+- **Endpoint**: `POST /api/orders`
+- **Description**: Places an order for the products in the user's cart.
+- **Authentication**: Required.
+- **Request Body**:
+  - List of product IDs and quantities.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 201 Created
+    - **Content**: Order details including order ID and total amount.
+  - **Error Response**:
+    - **Code**: 400 Bad Request
+    - **Content**: Error message indicating invalid order request.
+
+#### Canceling Orders
+
+- **Endpoint**: `DELETE /api/orders/:order_id`
+- **Description**: Cancels the specified order.
+- **Authentication**: Required.
+- **Parameters**:
+  - `order_id`: The ID of the order to cancel.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: Success message confirming order cancellation.
+  - **Error Response**:
+    - **Code**: 404 Not Found
+    - **Content**: Error message indicating order not found.
+
+#### Managing Delivery Addresses
+
+- **Endpoint**: `POST /api/orders/:order_id/address`
+- **Description**: Updates the delivery address for the specified order.
+- **Authentication**: Required.
+- **Parameters**:
+  - `order_id`: The ID of the order to update the delivery address for.
+- **Request Body**:
+  - New delivery address details.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: Success message confirming address update.
+  - **Error Response**:
+    - **Code**: 404 Not Found
+    - **Content**: Error message indicating order not found.
+
+### Admin Functions
+
+#### Adding Products
+
+- **Endpoint**: `POST /api/admin/products`
+- **Description**: Allows administrators to add new products to the platform.
+- **Authentication**: Required, administrator privileges.
+- **Request Body**:
+  - Details of the new product (name, description, price, etc.).
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 201 Created
+    - **Content**: Success message confirming product addition.
+  - **Error Response**:
+    - **Code**: 400 Bad Request
+    - **Content**: Error message indicating invalid product data.
+
+#### Categorizing Products
+
+- **Endpoint**: `POST /api/admin/products/:product_id/category`
+- **Description**: Assigns a category to the specified product.
+- **Authentication**: Required, administrator privileges.
+- **Parameters**:
+  - `product_id`: The ID of the product to categorize.
+- **Request Body**:
+  - Category ID or name to assign to the product.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: Success message confirming product categorization.
+  - **Error Response**:
+    - **Code**: 404 Not Found
+    - **Content**: Error message indicating product or category not found.
+
+#### Managing User Accounts
+
+- **Endpoint**: `PUT /api/admin/users/:user_id`
+- **Description**: Allows administrators to update user account details.
+- **Authentication**: Required, administrator privileges.
+- **Parameters**:
+  - `user_id`: The ID of the user to update.
+- **Request Body**:
+  - New user account details (e.g., username, email, password).
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: Success message confirming user account update.
+  - **Error Response**:
+    - **Code**: 404 Not Found
+    - **Content**: Error message indicating user not found or invalid update request.
+
+#### Managing Orders
+
+- **Endpoint**: `GET /api/admin/orders`
+- **Description**: Retrieves all orders for administrative purposes.
+- **Authentication**: Required, administrator privileges.
+- **Responses**:
+  - **Success Response**:
+    - **Code**: 200 OK
+    - **Content**: JSON array of order objects.
+  - **Error Response**:
+    - **Code**: 500 Internal Server Error
+    - **Content**: Error message indicating server failure.
 
 ### Product Interaction
 
