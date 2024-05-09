@@ -55,5 +55,8 @@ migrate: ## Migrate db schemas
 undo_migrate: ## Undo previous migration
 	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash -c "npx sequelize-cli db:migrate:undo"
 
+undo_all_migrate: ## Undo all migrations
+	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash -c "npx sequelize-cli db:migrate:undo:all"
+
 seed: ## Seed data into db
 	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash -c "npx sequelize-cli db:seed:all"
