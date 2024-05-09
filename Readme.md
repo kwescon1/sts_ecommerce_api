@@ -550,6 +550,135 @@ Requires authentication.
   }
   ``` -->
 
+### **Suspend User Account**
+
+#### **Endpoint**
+
+`GET /api/v1/user/:username/profile/suspend`
+
+#### **Description**
+
+Suspends a user account by an admin user. This endpoint allows administrators to suspend user accounts, preventing the user from accessing the platform until their suspension is lifted.
+
+#### **Authentication**
+
+Requires authentication as an admin user.
+
+#### **Request Parameters**
+
+- `username`: The username of the user account to be suspended. Required.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "User suspended successfully",
+    "data": {
+      "user": {
+        "id": "82eb4227-3e57-47f6-a9a0-92e975bc8f69",
+        "username": "johndoe2024",
+        "is_suspended": true
+      }
+    }
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 404 Not Found
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "User not found"
+  }
+  ```
+
+#### **Notes**
+
+- Admins can only suspend user accounts.
+- If the user is already suspended, a conflict error will be returned.
+
+### **Unsuspend User Account**
+
+#### **Endpoint**
+
+`GET /api/v1/user/:username/profile/unsuspend`
+
+#### **Description**
+
+Unsuspends a user account by an admin user. This endpoint allows administrators to lift the suspension on user accounts, restoring their access to the platform.
+
+#### **Authentication**
+
+Requires authentication as an admin user.
+
+#### **Request Parameters**
+
+- `username`: The username of the user account to be unsuspended. Required.
+
+#### **Responses**
+
+- **Success Response:**
+
+  **Code:** 200 OK
+
+  **Content:**
+
+  ```json
+  {
+    "success": true,
+    "message": "User unsuspended successfully",
+    "data": {
+      "user": {
+        "id": "82eb4227-3e57-47f6-a9a0-92e975bc8f69",
+        "username": "johndoe2024",
+        "is_suspended": false
+      }
+    }
+  }
+  ```
+
+- **Error Response:**
+
+  **Code:** 404 Not Found
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "User not found"
+  }
+  ```
+
+  **OR**
+
+  **Code:** 409 Conflict
+
+  **Content:**
+
+  ```json
+  {
+    "success": false,
+    "error": "User is not suspended"
+  }
+  ```
+
+#### **Notes**
+
+- Admins can only unsuspend user accounts.
+- If the user is not suspended, a conflict error will be returned.
+
 ---
 
 ## Token Management
