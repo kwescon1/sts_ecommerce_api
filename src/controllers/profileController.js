@@ -1,5 +1,6 @@
 const logger = require("../config/logging");
 const AddressResource = require("../resources/addressResource");
+const UserResource = require("../resources/userResource");
 class ProfileController {
   /**
    * CategoryController constructor.
@@ -29,6 +30,27 @@ class ProfileController {
     const userAddress = await this.profileService.getAddress(userId);
 
     res.success({ address: userAddress }, "Address retrieved successfully");
+  }
+
+  async suspendUserProfile(res, adminUserId, suspendUser) {
+    const user = await this.profileService.suspendUserProfile(
+      adminUserId,
+      suspendUser
+    );
+    const userResource = new UserResource(user);
+    return res.success({ user: userResource.toJson() }, "User suspended");
+  }
+
+  async unSuspendUserProfile(res, adminUserId, suspendedUser) {
+    const user = await this.profileService.unSuspendUserProfile(
+      adminUserId,
+      suspendedUser
+    );
+    const userResource = new UserResource(user);
+    return res.success(
+      { user: userResource.toJson() },
+      "User unsuspended successfully"
+    );
   }
 }
 

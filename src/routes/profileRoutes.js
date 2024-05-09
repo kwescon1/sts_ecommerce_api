@@ -36,4 +36,36 @@ profileRoutes.get(
     return req.profileController.getAddress(res, 4);
   })
 );
+
+profileRoutes.get(
+  "/:username/profile/suspend",
+  authenticate,
+  isAdmin,
+  asyncHandler((req, res) => {
+    const suspendUser = req?.params?.username;
+    const adminUserId = req?.user?.id;
+
+    return req.profileController.suspendUserProfile(
+      res,
+      adminUserId,
+      suspendUser
+    );
+  })
+);
+
+profileRoutes.get(
+  "/:username/profile/unsuspend",
+  authenticate,
+  isAdmin,
+  asyncHandler((req, res) => {
+    const suspendedUser = req?.params?.username;
+    const adminUserId = req?.user?.id;
+
+    return req.profileController.unSuspendUserProfile(
+      res,
+      adminUserId,
+      suspendedUser
+    );
+  })
+);
 module.exports = profileRoutes;

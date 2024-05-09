@@ -1,8 +1,9 @@
 const logger = require("../config/logging");
+const ConflictException = require("../exceptions/conflictException");
 const ForbiddenException = require("../exceptions/forbiddenException");
 const NotFoundException = require("../exceptions/notFoundException");
 const ValidationException = require("../exceptions/validationException");
-const { Address } = require("../models");
+const { Address, User } = require("../models");
 const { Op, where } = require("sequelize");
 
 /**
@@ -43,6 +44,63 @@ class ProfileService {
       throw new NotFoundException("User address not found");
     }
     return address;
+  }
+
+  async suspendUserProfile(adminUserId, suspendUser) {
+    // Find the admin user
+    const admin = await User.findByPk(adminUserId);
+
+    // Find the user to be suspended
+    const user = await User.findOne({ where: { username: suspendUser } });
+
+    // Check if the user exists
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    // Check if the admin is the same as the user to be suspended
+    if (admin.id === user.id) {
+      throw new ForbiddenException("Admin cannot suspend their own account");
+    }
+
+    // Check if the user is already suspended
+    if (user.is_suspended) {
+      throw new ConflictException("User is already suspended");
+    }
+
+    // Perform suspension logic: Change the is_suspended field to true
+    user.is_suspended = true;
+    await user.save();
+
+    // Return the suspended user along with success message
+    return user;
+  }
+
+  async unSuspendUserProfile(adminUserId, suspendedUser) {
+    const admin = await User.findByPk(adminUserId);
+
+    const user = await User.findOne({ where: { username: suspendedUser } });
+
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    // Check if the user is already unsuspended
+    if (!user.is_suspended) {
+      throw new ConflictException("User is not suspended");
+    }
+
+    // Check if the admin is the same as the user, then refuse the unsuspension
+    if (admin.id === user.id) {
+      throw new ForbiddenException("Admin cannot unsuspend themselves");
+    }
+
+    // Unsuspend the user by setting is_suspended to false
+    user.is_suspended = false;
+    await user.save();
+
+    // Return the unsuspended user
+    return user;
   }
 }
 
