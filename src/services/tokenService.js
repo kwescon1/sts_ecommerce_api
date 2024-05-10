@@ -44,23 +44,25 @@ class TokenService {
     const user = await User.findByPk(tokenRecord.user_id);
     if (!user) throw new ValidationException("User not found");
 
-    if (tokenRecord.count >= 5) {
-      await RefreshToken.destroy({ where: { id: tokenRecord.id } });
-      return this.generateToken(user);
-    } else {
-      tokenRecord.count += 1;
-      await tokenRecord.save();
+    // return this.generateToken(user);
 
-      const accessToken = jwt.sign(
-        this.createTokenPayload(user),
-        config.jwt.secret,
-        {
-          expiresIn: config.jwt.accessExpiry,
-        }
-      );
+    // if (tokenRecord.count >= 5) {
+    //   await RefreshToken.destroy({ where: { id: tokenRecord.id } });
+    //   return this.generateToken(user);
+    // } else {
+    // tokenRecord.count += 1;
+    // await tokenRecord.save();
 
-      return { accessToken, refreshToken };
-    }
+    const accessToken = jwt.sign(
+      this.createTokenPayload(user),
+      config.jwt.secret,
+      {
+        expiresIn: config.jwt.accessExpiry,
+      }
+    );
+
+    return { accessToken, refreshToken };
+    // }
   }
 
   async destroyToken(userId, accessToken) {
