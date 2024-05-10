@@ -112,7 +112,7 @@ class ProfileService {
         file
       );
       data.image_url = secure_url;
-      data.public_id = public_id;
+      data.image_identifier = public_id;
     }
 
     let [updatedRowsCount] = await User.update(data, { where: { id: userId } });
