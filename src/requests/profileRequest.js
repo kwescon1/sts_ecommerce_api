@@ -62,34 +62,6 @@ const updateProfileValidationRules = () => [
     .withMessage(
       "Email (email) address must not be longer than 254 characters."
     ),
-
-  body("image")
-    .optional()
-    .custom((value, { req }) => {
-      // Check if a file is uploaded
-      if (!req.file) {
-        throw new ValidationException("Image is required");
-      }
-
-      // Check file type
-      const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-      if (!allowedTypes.includes(req.file.mimetype)) {
-        throw new ValidationException(
-          "Only JPEG, PNG, and GIF images are allowed"
-        );
-      }
-
-      // Check file size (in bytes)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (req.file.size > maxSize) {
-        throw new ValidationException(
-          "Image size exceeds the maximum allowed size (5MB)"
-        );
-      }
-
-      return true;
-    })
-    .withMessage("Invalid image file"),
 ];
 
 module.exports = {
