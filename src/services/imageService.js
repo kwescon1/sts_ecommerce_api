@@ -4,9 +4,7 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 const ValidationException = require("../exceptions/validationException");
 const ConflictException = require("../exceptions/conflictException");
-
-// Define allowed file extensions
-const allowedExtensions = ["jpeg", "jpg", "png"];
+const logger = require("../config/logging");
 
 /**
  * Represents the service for handling images.
@@ -40,6 +38,8 @@ class ImageService {
       if (publicId) {
         options.public_id = publicId;
       }
+
+      //   public id will be the name TODO
       const result = await cloudinary.uploader.upload(file.path, options);
 
       // Return the uploaded file details
