@@ -8,7 +8,11 @@ const {
   updateProfileValidationRules,
 } = require("../requests/profileRequest");
 const { extractProfileData } = require("../utilities/utils");
-const { upload, handleUploadError } = require("../middlewares/multer");
+const {
+  upload,
+  handleUploadError,
+  validateImage,
+} = require("../middlewares/multer");
 const ForbiddenException = require("../exceptions/forbiddenException");
 
 // Create a new router instance.
@@ -39,7 +43,7 @@ profileRoutes.get(
   asyncHandler((req, res) => {
     const userId = req?.user?.id;
 
-    return req.profileController.getAddress(res, 4);
+    return req.profileController.getAddress(res, userId);
   })
 );
 
@@ -86,7 +90,8 @@ profileRoutes.put(
     req.body = data; // Save the extracted data to the request object
     next(); // Proceed to the next middleware
   },
-  upload.single(),
+  upload.single("image"),
+  validateImage,
   handleUploadError,
   asyncHandler((req, res, next) => {
     const userId = req?.params?.id;
