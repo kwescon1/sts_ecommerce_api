@@ -12,6 +12,7 @@ const CategoryService = require("../services/categoryService");
 const CategoryController = require("../controllers/categoryController");
 const ProfileService = require("../services/profileService");
 const ProfileController = require("../controllers/profileController");
+const EmailService = require("../services/emailService");
 
 // Initialize the container
 const container = createContainer();
@@ -28,6 +29,7 @@ container.register({
 
   redisService: asValue(RedisService),
   imageService: asValue(ImageService),
+  emailService: asValue(EmailService),
 
   tokenService: asClass(TokenService).scoped(),
   tokenController: asClass(TokenController).scoped(),
