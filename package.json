@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
-    "dev": "nodemon --exec babel-node src/app.js",
+    "dev": "nodemon --exec 'node --trace-warnings -r @babel/register' src/app.js",
     "build": "babel src -d dist --presets @babel/preset-env --ignore node_modules,dist"
   },
   "keywords": [
@@ -19,6 +19,7 @@
   "dependencies": {
     "awilix": "^10.0.2",
     "bcryptjs": "^2.4.3",
+    "bull": "^4.12.3",
     "cloudinary": "^2.2.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -36,16 +37,16 @@
     "mysql2": "^3.9.7",
     "nodemailer": "^6.9.13",
     "sequelize": "^6.37.3",
-    "sharp": "^0.33.3",
     "uuid": "^9.0.1",
     "winston": "^3.13.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.1",
-    "@babel/core": "^7.24.4",
+    "@babel/core": "^7.24.5",
     "@babel/node": "^7.23.9",
-    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-env": "^7.24.5",
+    "@babel/register": "^7.23.7",
     "nodemon": "^3.1.0",
     "sequelize-cli": "^6.6.2"
   }
