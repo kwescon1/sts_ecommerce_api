@@ -20,6 +20,7 @@ const config = {
     host: process.env.REDIS_HOST,
     password: process.env.REDIS_PASSWORD,
     port: process.env.REDIS_PORT,
+    internal: 6379,
   },
   mail: {
     mailer: process.env.MAIL_MAILER,
