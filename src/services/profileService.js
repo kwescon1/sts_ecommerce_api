@@ -5,6 +5,9 @@ const NotFoundException = require("../exceptions/notFoundException");
 const ValidationException = require("../exceptions/validationException");
 const { Address, User } = require("../models");
 const { Op, where } = require("sequelize");
+const SuspendedUser = require("../workers/suspendedUser");
+const DeletedUser = require("../workers/deletedUser");
+const RemovedSuspension = require("../workers/suspensionRemoved");
 
 /**
  * Represents the service for managing profiles.
@@ -75,6 +78,12 @@ class ProfileService {
     user.is_suspended = true;
     await user.save();
 
+    // Dispatched Suspended User Email
+    SuspendedUser.enqueueSuspendedUserEmail({
+      to: user.email,
+      clientName: `${user.first_name} ${user.last_name}`,
+    });
+
     // Return the suspended user along with success message
     return user;
   }
@@ -102,11 +111,33 @@ class ProfileService {
     user.is_suspended = false;
     await user.save();
 
+    // Dispatched Suspension Removal Email
+    RemovedSuspension.enqueueRemovedSuspensionEmail({
+      to: user.email,
+      clientName: `${user.first_name} ${user.last_name}`,
+    });
+
     // Return the unsuspended user
     return user;
   }
 
   async updateUserProfile(data, userId, file) {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      throw new ConflictException("User not found");
+    }
+
+    // Check if a new file is uploaded and if the user already has an image
+    if (file && user.image_identifier) {
+      // Attempt to delete the old image from the cloud
+      try {
+        await this.imageService.deleteFile(user.image_identifier);
+      } catch (error) {
+        throw new Error("Failed to delete old profile image");
+      }
+    }
+
+    // If a new file is provided, upload it
     if (file) {
       const { secure_url, public_id } = await this.imageService.uploadFile(
         file
@@ -115,14 +146,15 @@ class ProfileService {
       data.image_identifier = public_id;
     }
 
-    let [updatedRowsCount] = await User.update(data, { where: { id: userId } });
-
+    // Update the user profile with new data
+    const [updatedRowsCount] = await User.update(data, {
+      where: { id: userId },
+    });
     if (updatedRowsCount === 0) {
       throw new ConflictException("Failed to update user profile");
     }
 
-    await User.update(data, { where: { id: userId } });
-
+    // Return the updated user profile
     return await User.scope("withImageIdentifier").findByPk(userId);
   }
 
@@ -153,6 +185,12 @@ class ProfileService {
     }
 
     await User.destroy({ where: { id: userId } });
+
+    // Dispatched Deleted User Email
+    DeletedUser.enqueueDeletedUserEmail({
+      to: user.email,
+      clientName: `${user.first_name} ${user.last_name}`,
+    });
 
     return true;
   }
