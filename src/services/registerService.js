@@ -4,6 +4,7 @@ const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
 const { hashPassword } = require("../utilities/utils");
 const TokenService = require("./tokenService");
+const RegisteredUser = require("../workers/registeredUser");
 
 /**
  * Represents the service for managing registering users.
@@ -40,6 +41,15 @@ class RegisterService extends TokenService {
 
     // Create the user
     const newUser = await User.create(data);
+
+    // Dispatch email to registered user
+
+    RegisteredUser.enqueueWelcomeEmail({
+      to: newUser.email,
+      clientName: `${newUser.first_name} ${newUser.last_name}`,
+    });
+
+    console.log(`Enqueued welcome email to ${newUser.email}`);
 
     // Generate a token for the new user
     const { accessToken, refreshToken } = this.generateToken(newUser);
