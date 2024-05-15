@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Suspended</title>
+  </head>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f4f4f4;
+    "
+  >
+    <div
+      style="
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        padding: 30px;
+        max-width: 500px;
+        margin: 0 auto;
+      "
+    >
+      <h1 style="color: #ff6347">Account Suspended - {{companyName}}</h1>
+      <h3 style="color: black">Hello {{ clientName }},</h3>
+      <p style="font-size: 16px; color: #333">
+        Your account has been suspended due to violations of our terms of
+        service.
+      </p>
+      <p style="font-size: 16px; color: #333">
+        If you believe this is a mistake or have any questions, please
+        <a
+          href="mailto:support@example.com"
+          style="color: #007bff; text-decoration: none"
+          >contact us</a
+        >.
+      </p>
+      <p style="font-size: 16px; color: #333">
+        We hope to resolve this issue as soon as possible.
+      </p>
+    </div>
+  </body>
+</html>
