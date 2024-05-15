@@ -11,55 +11,81 @@ class EmailService {
   constructor() {
     this.transporter = transporter;
   }
-  // async sendMail(from, to, subject, text, html) {
-  //   const mailOptions = {
-  //     from, // sender address
-  //     to, // list of receivers
-  //     subject, // Subject line
-  //     text, // plain text body
-  //     html, // html body
-  //   };
 
-  //   try {
-  //     const info = await this.transporter.sendMail(mailOptions);
-  //     console.log("Message sent: %s", info.messageId);
-  //     return info;
-  //   } catch (error) {
-  //     console.error("Error sending email:", error);
-  //     throw error;
-  //   }
-  // }
-
-  async sendWelcomeEmail(to, clientName) {
-    const templatePath = path.join(
-      __dirname,
-      "../../public/views/welcome_email.hbs"
-    );
-    const source = await readFileAsync(templatePath, "utf8");
-    const template = Handlebars.compile(source);
-    const currentYear = new Date().getFullYear();
-    const companyName = config.app.name;
-
-    const htmlToSend = template({
-      clientName,
-      companyName,
-      currentYear,
-    });
-
-    const mailOptions = {
-      from: config.mail.fromAddress,
-      to: to,
-      subject: `Welcome to ${companyName}!`,
-      html: htmlToSend,
-    };
-
+  async sendEmail(
+    to,
+    subject,
+    templateName = null,
+    templateData = null,
+    text = null
+  ) {
     try {
+      let htmlToSend;
+      if (templateName) {
+        const templatePath = path.join(
+          __dirname,
+          `../../public/views/${templateName}.hbs`
+        );
+        const source = await readFileAsync(templatePath, "utf8");
+        const template = Handlebars.compile(source);
+        htmlToSend = template(templateData);
+      }
+
+      const mailOptions = {
+        from: config.mail.fromAddress,
+        to,
+        subject,
+        text, // plain text body
+        html: htmlToSend, // html body
+      };
+
       await this.transporter.sendMail(mailOptions);
       console.log("Email sent successfully");
     } catch (error) {
       console.log("Error in sending email");
       logger.error(JSON.stringify(error));
     }
+  }
+
+  async sendWelcomeEmail(to, clientName) {
+    const subject = `Welcome to ${config.app.name}!`;
+    const templateData = {
+      clientName,
+      companyName: config.app.name,
+      currentYear: new Date().getFullYear(),
+    };
+    await this.sendEmail(to, subject, "welcome_email", templateData);
+  }
+
+  async sendSuspensionEmail(to, clientName) {
+    const subject = `Account Suspended - ${config.app.name}`;
+    const templateData = {
+      clientName,
+      companyName: config.app.name,
+    };
+    await this.sendEmail(to, subject, "user_account_suspension", templateData);
+  }
+
+  async sendDeletionEmail(to, clientName) {
+    const subject = `Account Deleted - ${config.app.name}`;
+    const templateData = {
+      clientName,
+      companyName: config.app.name,
+    };
+    await this.sendEmail(to, subject, "user_account_deletion", templateData);
+  }
+
+  async suspensionRemoved(to, clientName) {
+    const subject = `Suspension Removed - ${config.app.name}`;
+    const templateData = {
+      clientName,
+      companyName: config.app.name,
+    };
+    await this.sendEmail(to, subject, "suspension_removal", templateData);
+  }
+
+  async sendSimpleEmail(to, subject, text) {
+    await this.sendEmail(to, subject, null, null, text);
   }
 }
 
