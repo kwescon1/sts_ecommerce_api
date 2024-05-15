@@ -42,7 +42,7 @@ ps: ## Show containers
 teardown: ## Tear down containers and remove volumes
 	docker-compose down -v
 
-shell: ## Access the shell of the ThisWeekInDuluth container
+shell: ## Access the shell of the ecommerce container
 	@docker exec -it -u ubuntu STS_Ecommerce /bin/bash
 
 logs: ## Follow logs from all containers
