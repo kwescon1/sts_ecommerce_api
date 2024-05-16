@@ -486,6 +486,102 @@ productRoutes.get(
   })
 );
 
+/**
+ * @swagger
+ * /api/v1/products/deleted:
+ *   get:
+ *     summary: Retrieve soft-deleted products
+ *     description: Retrieves all soft deleted products. Requires admin privileges
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Retrieved deleted products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     deleted_products:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           sku:
+ *                             type: string
+ *                           category_id:
+ *                             type: integer
+ *                           last_updated_restock_level:
+ *                             type: integer
+ *                             nullable: true
+ *                           current_stock_level:
+ *                             type: integer
+ *                             nullable: true
+ *                           deleted_at:
+ *                             type: string
+ *                             format: date-time
+ *                           created_at:
+ *                             type: string
+ *                             format: date-time
+ *                           updated_at:
+ *                             type: string
+ *                             format: date-time
+ *                 message:
+ *                   type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 deleted_products:
+ *                   - id: "04bc7a08-757a-4921-aece-bd3cc6fc72e0"
+ *                     name: "Product Name 4"
+ *                     sku: "SKU-202405163-0039"
+ *                     category_id: 2
+ *                     last_updated_restock_level: 39
+ *                     current_stock_level: 83
+ *                     deleted_at: "2024-05-16T20:17:53.000Z"
+ *                     created_at: "2024-05-16T16:07:05.000Z"
+ *                     updated_at: "2024-05-16T20:17:53.000Z"
+ *               message: "Retrieved deleted products"
+ *       403:
+ *         description: Forbidden - Admin authorization required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ *             example:
+ *               success: false
+ *               error: "Forbidden - Admin authorization required"
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ *             example:
+ *               success: false
+ *               error: "Unauthorized - Authentication required"
+ */
+
 productRoutes.get(
   "/deleted",
   authenticate,
