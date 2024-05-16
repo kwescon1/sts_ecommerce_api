@@ -1,4 +1,5 @@
-const { sequelize, Product, Stock, Op } = require("../models");
+const { sequelize, Product, Stock } = require("../models");
+const { Op } = require("sequelize");
 const { extractProductData, extractStockData } = require("../utilities/utils");
 const {
   generate,
@@ -84,11 +85,11 @@ class ProductService {
     return products;
   }
 
-  //   TODO paginate later on not working currently
+  //   TODO paginate later on
   async getSoftDeletedProducts() {
-    const deletedProducts = await Product.findAll({
+    const deletedProducts = await Product.scope("withDeletedAt").findAll({
       where: { deleted_at: { [Op.not]: null } },
-      paranoid: true, // We want to include deleted records
+      paranoid: false,
     });
 
     return deletedProducts;
