@@ -1,0 +1,64 @@
+"use strict";
+const { Model, Op } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class Cart extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      Cart.belongsTo(models.User, {
+        foreignKey: "user_id",
+        as: "user",
+      });
+      Cart.hasMany(models.CartItem, {
+        foreignKey: "cart_id",
+        as: "items",
+        onDelete: "CASCADE",
+      });
+    }
+  }
+  Cart.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      user_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: "Cart",
+      tableName: "carts",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+      paranoid: true,
+      deletedAt: "deleted_at",
+      defaultScope: {
+        attributes: {
+          exclude: ["created_at", "updated_at", "deleted_at"],
+        },
+      },
+      scopes: {
+        withDates: {
+          attributes: { include: ["created_at", "updated_at", "deleted_at"] },
+        },
+        withPartialDates: {
+          attributes: { include: ["created_at", "updated_at"] },
+        },
+        isDeleted: {
+          where: {
+            deleted_at: { [Op.not]: null },
+          },
+        },
+      },
+    }
+  );
+  return Cart;
+};
