@@ -95,15 +95,15 @@ const userValidationRules = () => [
     .withMessage(
       "Email (email) address must not be longer than 254 characters."
     )
-    .custom((email) => {
-      const domain = email.split("@")[1];
-      if (domain !== "example.com") {
-        throw new ValidationException(
-          "Email (email) must be from the domain example.com"
-        );
-      }
-      return true;
-    })
+    // .custom((email) => {
+    //   const domain = email.split("@")[1];
+    //   if (domain !== "example.com") {
+    //     throw new ValidationException(
+    //       "Email (email) must be from the domain example.com"
+    //     );
+    //   }
+    //   return true;
+    // })
     .not()
     .isIn(["/", "\\", "<", ">", "&"])
     .withMessage("Email (email) address contains invalid characters."),
