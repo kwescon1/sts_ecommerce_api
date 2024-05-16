@@ -57,7 +57,7 @@ class ProductController {
     const deletedProducts = await this.productService.getSoftDeletedProducts();
 
     return res.success(
-      { deleted_prodcuts: deletedProducts },
+      { deleted_products: deletedProducts },
       "Retrieved deleted products"
     );
   }
