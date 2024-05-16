@@ -10,8 +10,7 @@ services:
       - key: NODE_ENV
         value: production
     ports:
-      - name: http
-        port: 3000
+      - port: 3000
     healthCheckPath: /
     buildCommand: docker build -t sts-app -f ./docker-files/node/Dockerfile .
     dependsOn:
@@ -23,8 +22,7 @@ services:
     dockerfilePath: ./docker-files/nginx/Dockerfile
     startCommand: nginx -g "daemon off;"
     ports:
-      - name: http
-        port: 80
+      - port: 80
     buildCommand: docker build -t sts-nginx-webserver -f ./docker-files/nginx/Dockerfile .
     envVars:
       - key: PORT
@@ -32,16 +30,11 @@ services:
     dependsOn:
       - name: sts-app
 
-  - type: database
+  - type: web
     name: sts-db
-    databaseName: ${DB_DATABASE}
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    engine: mysql
-    version: 8.0
-    disk:
-      name: mysql-data
-      sizeGB: 10
+    env: docker
+    image: mysql:8.0
+    startCommand: mysqld
     envVars:
       - key: MYSQL_ROOT_PASSWORD
         value: ${DB_PASSWORD}
@@ -51,10 +44,11 @@ services:
         value: ${DB_USERNAME}
       - key: MYSQL_PASSWORD
         value: ${DB_PASSWORD}
-    startCommand: mysqld
     ports:
-      - name: mysql
-        port: 3306
+      - port: 3306
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
 
   - type: web
     name: sts-dbms
@@ -62,20 +56,19 @@ services:
     image: adminer:latest
     startCommand: docker run -d -p ${ADMINER_PORT}:8080 adminer
     ports:
-      - name: adminer
-        port: 8080
+      - port: 8080
     envVars:
       - key: ADMINER_DEFAULT_SERVER
         value: db
 
-  - type: redis
+  - type: web
     name: sts-redis
+    env: docker
     image: redis:alpine
     startCommand: redis-server
     ports:
-      - name: redis
-        port: 6379
+      - port: 6379
     envFile: .env
     disk:
       name: redis-data
-      sizeGB: 1
+      mountPath: /data
