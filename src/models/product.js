@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         as: "cartItems",
       });
 
-      // Product.hasMany(models.Wishlist, {
-      //   foreignKey: "product_id",
-      //   as: "wishlistedBy",
-      // });
+      Product.hasMany(models.Wishlist, {
+        foreignKey: "product_id",
+        as: "wishlistedBy",
+      });
     }
   }
   Product.init(
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      deletedAt: {
+      deleted_at: {
         // Add the deletedAt field
         type: DataTypes.DATE,
         allowNull: true,
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: "updated_at",
       defaultScope: {
         attributes: {
-          exclude: ["created_at", "updated_at", "deletedAt"],
+          exclude: ["created_at", "updated_at", "deleted_at"],
         },
       },
       paranoid: true, // Enable soft delete
