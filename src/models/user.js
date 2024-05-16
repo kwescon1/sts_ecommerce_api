@@ -6,7 +6,6 @@ const logger = require("../config/logging");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // Define associations here, if any
       User.hasMany(models.RefreshToken, {
         foreignKey: "user_id",
         as: "refreshTokens",
@@ -17,6 +16,28 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
         as: "address",
         onDelete: "CASCADE",
+      });
+
+      // User.hasMany(models.Order, {
+      //   foreignKey: "user_id",
+      //   as: "orders",
+      // });
+
+      User.hasOne(models.Cart, {
+        foreignKey: "user_id",
+        as: "cart",
+        onDelete: "CASCADE",
+      });
+
+      // User.hasMany(models.Transaction, {
+      //   foreignKey: "user_id",
+      //   as: "transactions",
+      //   onDelete: "CASCADE",
+      // });
+
+      User.hasMany(models.Wishlist, {
+        foreignKey: "user_id",
+        as: "wishlists",
       });
     }
   }
