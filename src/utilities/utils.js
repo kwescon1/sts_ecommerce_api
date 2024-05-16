@@ -36,10 +36,27 @@ const extractProfileData = (body) => {
   return Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ""));
 };
 
+const extractProductData = (body) => {
+  const { name, category_id } = body;
+
+  const data = { name, category_id };
+  // Filter out empty values
+  return Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ""));
+};
+const extractStockData = (body) => {
+  const { retail_price, cost_price, quantity, comment } = body;
+
+  const data = { retail_price, cost_price, quantity, comment };
+  // Filter out empty values
+  return Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ""));
+};
+
 module.exports = {
   hashPassword,
   verifyPassword,
   verifyToken,
   generateUniqueName,
   extractProfileData,
+  extractProductData,
+  extractStockData,
 };
