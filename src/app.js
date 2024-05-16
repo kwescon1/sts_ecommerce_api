@@ -8,6 +8,9 @@ const path = require("path");
 
 app.set("trust proxy", 1);
 
+const swaggerConfig = require("../swagger");
+swaggerConfig(app);
+
 const router = require("./routes/index.js");
 const errorHandler = require("./exceptions/handler.js");
 const CorsMiddleware = require("./middlewares/handleCors.js");
