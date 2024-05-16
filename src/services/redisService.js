@@ -8,7 +8,16 @@ class RedisService {
 
   async get(key) {
     const value = await redisClient.get(key);
-    return JSON.parse(value);
+    if (value) {
+      try {
+        return JSON.parse(value);
+      } catch (error) {
+        throw new Error(
+          `Failed to parse JSON from Redis for key ${key}: ${error.message}`
+        );
+      }
+    }
+    return null;
   }
 
   async del(key) {
