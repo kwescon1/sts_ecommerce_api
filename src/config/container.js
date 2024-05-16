@@ -15,6 +15,10 @@ const ProfileController = require("../controllers/profileController");
 const EmailService = require("../services/emailService");
 const WishlistController = require("../controllers/wishlistController");
 const WishlistService = require("../services/wishlistService");
+const ProductController = require("../controllers/productController");
+const ProductService = require("../services/productService");
+const StockController = require("../controllers/stockController");
+const StockService = require("../services/stockService");
 
 // Initialize the container
 const container = createContainer();
@@ -44,6 +48,12 @@ container.register({
 
   wishlistService: asClass(WishlistService).scoped(),
   wishlistController: asClass(WishlistController).scoped(),
+
+  productService: asClass(ProductService).scoped(),
+  productController: asClass(ProductController).scoped(),
+
+  stockService: asClass(StockService).scoped(),
+  stockController: asClass(StockController).scoped(),
 });
 
 module.exports = container;
