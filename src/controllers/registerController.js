@@ -4,7 +4,7 @@ class RegisterController {
   /**
    * RegisterController constructor.
    * Injects RegisterService for handling the business logic.
-   * @param {RegisterService} registerService - The service for task operations.
+   * @param {RegisterService} registerService - The service for auth operations.
    */
   constructor({ registerService }) {
     this.registerService = registerService;
