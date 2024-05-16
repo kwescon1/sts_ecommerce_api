@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       comment: {
         type: DataTypes.TEXT,
       },
-      deletedAt: {
+      deleted_at: {
         type: DataTypes.DATE,
         allowNull: true,
       },
