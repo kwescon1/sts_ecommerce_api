@@ -22,7 +22,6 @@ class ProductService {
   }
 
   async storeProduct(data) {
-    console.log("Storing product with data:", data);
     const body = extractProductData(data);
 
     // Generate SKU
@@ -33,16 +32,14 @@ class ProductService {
     const stockBody = extractStockData(data);
 
     return await sequelize.transaction(async (transaction) => {
-      console.log("Creating product with body:", body);
       const product = await Product.create(body, { transaction });
 
       if (data.add_stock) {
         stockBody.product_id = product.id;
-        console.log("Storing product stock with stockBody:", stockBody);
+
         await this.stockService.storeProductStock(stockBody, transaction);
       }
 
-      console.log("Reloading product with stock included.");
       return product.reload({
         include: [{ model: Stock, as: "stock" }],
         transaction,
@@ -102,9 +99,24 @@ class ProductService {
       throw new NotFoundException("Product not found");
     }
 
-    await product.destroy();
+    return await sequelize.transaction(async (transaction) => {
+      // Soft delete the product
+      await product.destroy({ transaction });
 
-    return true;
+      // Check if stock exists before attempting to update it
+      const stock = await Stock.findOne({
+        where: { product_id: productId },
+        transaction,
+        paranoid: false,
+      });
+
+      if (stock) {
+        // Soft delete the associated stock records
+        await stock.update({ deleted_at: new Date() }, { transaction });
+      }
+
+      return true;
+    });
   }
 
   async forceDeleteProduct(productId) {
@@ -122,7 +134,6 @@ class ProductService {
   }
 
   async generateSku(itemCategory) {
-    console.log("Generating SKU for item category:", itemCategory);
     // Check Redis for the latest SKU
     let latestUniqueSkuNumber = await this.latestUniqueSkuNumber();
     console.log(
