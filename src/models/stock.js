@@ -62,6 +62,11 @@ module.exports = (sequelize, DataTypes) => {
           exclude: ["created_at", "updated_at", "deleted_at"],
         },
       },
+      scopes: {
+        withDeletedAt: {
+          attributes: { include: ["deleted_at"] },
+        },
+      },
     }
   );
 
