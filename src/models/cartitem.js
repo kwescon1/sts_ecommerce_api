@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
             this.product && this.product.stock
               ? this.product.stock.cost_price
               : 0;
-          return quantity * cost_price;
+          return parseFloat((quantity * cost_price).toFixed(2));
         },
       },
     },
