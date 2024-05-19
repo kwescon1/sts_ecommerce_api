@@ -288,7 +288,7 @@ stockRoutes.post(
  *   delete:
  *     summary: Delete product stock
  *     description: Deletes the stock record of a product and updates the product's current stock level. Requires admin privileges.
- *     tags: [Stocks]
+ *     tags: [Product Stock]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -478,7 +478,7 @@ stockRoutes.get(
  *   get:
  *     summary: Get all deleted product stocks
  *     description: Retrieves all deleted product stocks. Requires admin privileges.
- *     tags: [Stocks]
+ *     tags: [Product Stock]
  *     security:
  *       - bearerAuth: []
  *     responses:
