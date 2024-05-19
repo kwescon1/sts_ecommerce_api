@@ -18,6 +18,11 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
+      is_current: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

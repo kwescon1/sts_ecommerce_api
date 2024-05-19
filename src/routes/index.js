@@ -7,6 +7,7 @@ const profileRoutes = require("./profileRoutes");
 const wishlistRoutes = require("./wishListRoutes");
 const productRoutes = require("./productRoutes");
 const stockRoutes = require("./stockRoutes");
+const cartRoutes = require("./cartRoutes");
 
 // Create router instance
 const router = express.Router();
@@ -19,6 +20,7 @@ router.use("/user", profileRoutes);
 router.use("/user", wishlistRoutes);
 router.use("/products", productRoutes);
 router.use("/stocks/product", stockRoutes);
+router.use("/cart", cartRoutes);
 
 // export configured routes
 module.exports = router;

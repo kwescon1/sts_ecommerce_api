@@ -27,6 +27,11 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
+      is_ordered: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,

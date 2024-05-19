@@ -33,6 +33,22 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 1,
       },
+      is_ordered: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      price: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          const quantity = this.getDataValue("quantity");
+          const cost_price =
+            this.product && this.product.stock
+              ? this.product.stock.cost_price
+              : 0;
+          return quantity * cost_price;
+        },
+      },
     },
     {
       sequelize,
