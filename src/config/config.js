@@ -52,6 +52,9 @@ const config = {
     name: process.env.CLOUDINARY_CLOUD_NAME,
     folder: process.env.CLOUDINARY_STORAGE_FOLDER,
   },
+  crypto: {
+    secretKey: process.env.CRYPTO_ENCRYPTION_KEY,
+  },
 };
 
 module.exports = config;
