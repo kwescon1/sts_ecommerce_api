@@ -1,5 +1,3 @@
-const CartResource = require("../resources/getCartResource");
-
 class CartController {
   /**
    * CartController constructor.
@@ -22,14 +20,9 @@ class CartController {
     const userId = req.user.id;
     const cartId = req.params.cart_id;
 
-    const userCart = await this.cartService.getUserCart(userId, cartId);
+    const cart = await this.cartService.getUserCart(userId, cartId);
 
-    const cartResource = new CartResource(userCart);
-
-    return res.success(
-      { cart: cartResource.toJson() },
-      "User cart retrieved successfully"
-    );
+    return res.success(cart, "User cart retrieved successfully");
   }
 
   async updateItemQuantity(req, res, cartId) {
