@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const logger = require("../config/logging");
 const ValidationException = require("../exceptions/validationException");
 const { User } = require("../models");
-const { hashPassword } = require("../utilities/utils");
+const { hashData } = require("../utilities/utils");
 const TokenService = require("./tokenService");
 const RegisteredUser = require("../workers/registeredUser");
 
@@ -35,7 +35,7 @@ class RegisterService extends TokenService {
       );
     }
 
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = hashData(password);
 
     data.password = hashedPassword;
 
