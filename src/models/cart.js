@@ -1,7 +1,10 @@
 "use strict";
 const { Model, Op } = require("sequelize");
+const CART_CACHE_KEY = "CART-";
+
 module.exports = (sequelize, DataTypes) => {
   class Cart extends Model {
+    static CART_CACHE_KEY = CART_CACHE_KEY;
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
