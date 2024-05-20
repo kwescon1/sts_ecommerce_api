@@ -1,13 +1,17 @@
 const { sequelize, Cart, CartItem, Product, Stock } = require("../models");
 const ConflictException = require("../exceptions/conflictException");
-const { Op } = require("sequelize");
 const NotFoundException = require("../exceptions/notFoundException");
-
+const { encrypt } = require("../utilities/utils");
+const CartResource = require("../resources/getCartResource");
 /**
  * Represents the service for managing cart.
  * Encapsulates the business logic for cart operations.
  */
 class CartService {
+  constructor({ redisService }) {
+    this.redisService = redisService;
+  }
+
   async storeCartItem(userId, data) {
     return await sequelize.transaction(async (transaction) => {
       // Get user current cart id
@@ -43,6 +47,9 @@ class CartService {
         );
       }
 
+      // clear cache if available
+      await this.clearCache(data.cart_id);
+
       // Store data in cart item table
       return await CartItem.create(data, { transaction });
     });
@@ -69,7 +76,7 @@ class CartService {
   }
 
   async getUserCart(userId, cartId) {
-    const cart = await Cart.findOne({
+    let cart = await Cart.findOne({
       where: { id: cartId, user_id: userId, is_current: 1 },
       include: [
         {
@@ -105,6 +112,11 @@ class CartService {
     if (!cart) {
       throw new NotFoundException("Cart not found");
     }
+    // create cache for faster checkout
+
+    cart = new CartResource(cart);
+
+    await this.redisService.set(Cart.CART_CACHE_KEY + cartId, encrypt(cart));
 
     return cart;
   }
@@ -135,6 +147,9 @@ class CartService {
       const cartItem = cart.items[0];
 
       await cartItem.destroy({ transaction });
+
+      //clear cache if available
+      await this.clearCache(cartId);
 
       return true;
     });
@@ -167,6 +182,8 @@ class CartService {
           transaction,
         }
       );
+
+      await this.clearCache(cartId);
 
       return true;
     });
@@ -216,6 +233,9 @@ class CartService {
       // Update the quantity of the cart item
       await cartItem.update({ quantity }, { transaction });
 
+      // clear cache if available
+      await this.clearCache(cartId);
+
       // Reload the cart item to include updated data
       return await cartItem.reload({
         transaction,
@@ -248,6 +268,13 @@ class CartService {
     }
 
     return cart.get("item_count");
+  }
+
+  async clearCache(cart_id) {
+    if (await this.redisService.get(Cart.CART_CACHE_KEY + cart_id)) {
+      await this.redisService.del(Cart.CART_CACHE_KEY + cart_id);
+    }
+    return;
   }
 }
 
