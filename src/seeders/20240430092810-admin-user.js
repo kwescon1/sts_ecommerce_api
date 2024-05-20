@@ -1,6 +1,6 @@
 "use strict";
 
-const { hashPassword } = require("../utilities/utils");
+const { hashData } = require("../utilities/utils");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 const config = require("../config/config");
@@ -18,8 +18,8 @@ module.exports = {
       : moment("1990-01-01").format("YYYY-MM-DD");
 
     const password = config.user.password
-      ? hashPassword(config.user.password)
-      : hashPassword("defaultPassword123");
+      ? hashData(config.user.password)
+      : hashData("defaultPassword123");
 
     return queryInterface.bulkInsert(
       "users",
