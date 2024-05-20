@@ -12,8 +12,10 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Local server",
+        url: process.env.APP_URL,
+        description: (process.env.APP_ENV = "local"
+          ? "Local Server"
+          : "Production Server"),
       },
     ],
     components: {
