@@ -1,10 +1,7 @@
-const logger = require("../config/logging");
 const ConflictException = require("../exceptions/conflictException");
 const ForbiddenException = require("../exceptions/forbiddenException");
 const NotFoundException = require("../exceptions/notFoundException");
-const ValidationException = require("../exceptions/validationException");
 const { Address, User } = require("../models");
-const { Op, where } = require("sequelize");
 const SuspendedUser = require("../workers/suspendedUser");
 const DeletedUser = require("../workers/deletedUser");
 const RemovedSuspension = require("../workers/suspensionRemoved");
