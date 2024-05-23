@@ -12,16 +12,16 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
+      User.hasMany(models.Order, {
+        foreignKey: "user_id",
+        as: "orders",
+      });
+
       User.hasOne(models.Address, {
         foreignKey: "user_id",
         as: "address",
         onDelete: "CASCADE",
       });
-
-      // User.hasMany(models.Order, {
-      //   foreignKey: "user_id",
-      //   as: "orders",
-      // });
 
       User.hasOne(models.Cart, {
         foreignKey: "user_id",
@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      // User.hasMany(models.Transaction, {
-      //   foreignKey: "user_id",
-      //   as: "transactions",
-      //   onDelete: "CASCADE",
-      // });
+      User.hasMany(models.Transaction, {
+        foreignKey: "user_id",
+        as: "transactions",
+        onDelete: "CASCADE",
+      });
 
       User.hasMany(models.Wishlist, {
         foreignKey: "user_id",

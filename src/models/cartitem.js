@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       CartItem.belongsTo(models.Product, {
         foreignKey: "product_id",
         as: "product",
+        constraints: false,
       });
       CartItem.belongsTo(models.Cart, {
         foreignKey: "cart_id",
         as: "cart",
+        constraints: false,
       });
     }
   }

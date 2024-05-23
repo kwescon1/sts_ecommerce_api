@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Address.belongsTo(models.User, {
         foreignKey: "user_id",
         as: "user",
+        constraints: false,
       });
     }
   }

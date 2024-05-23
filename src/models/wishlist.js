@@ -8,11 +8,13 @@ module.exports = (sequelize, DataTypes) => {
       Wishlist.belongsTo(models.User, {
         foreignKey: "user_id",
         as: "user",
+        constraints: false,
       });
       // Define association with Product
       Wishlist.belongsTo(models.Product, {
         foreignKey: "product_id",
         as: "product",
+        constraints: false,
       });
     }
   }

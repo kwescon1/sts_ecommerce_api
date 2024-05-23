@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       Stock.belongsTo(models.Product, {
         foreignKey: "product_id",
         as: "product",
+        constraints: false,
       });
     }
   }
