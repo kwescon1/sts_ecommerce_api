@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
-    "dev": "nodemon --exec 'node --trace-warnings -r @babel/register' src/app.js",
+    "dev": "nodemon --exec 'node --trace-warnings -r @babel/register' dist/app.js",
     "build": "babel src -d dist --presets @babel/preset-env --ignore node_modules,dist"
   },
   "keywords": [
@@ -38,6 +38,7 @@
     "mysql2": "^3.9.7",
     "nodemailer": "^6.9.13",
     "sequelize": "^6.37.3",
+    "stripe": "^15.7.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1",

@@ -55,6 +55,11 @@ const config = {
   crypto: {
     secretKey: process.env.CRYPTO_ENCRYPTION_KEY,
   },
+
+  stripe: {
+    apiKey: process.env.STRIPE_API_KEY,
+    secretKey: process.env.STRIPE_SECRET_KEY,
+  },
 };
 
 module.exports = config;
