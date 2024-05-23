@@ -21,6 +21,13 @@ const StockController = require("../controllers/stockController");
 const StockService = require("../services/stockService");
 const CartController = require("../controllers/cartController");
 const CartService = require("../services/cartService");
+const CheckoutController = require("../controllers/checkoutController");
+const CheckoutService = require("../services/checkoutService");
+const TransactionController = require("../controllers/transactionController");
+const TransactionService = require("../services/transactionService");
+
+const OrderController = require("../controllers/orderController");
+const OrderService = require("../services/orderService");
 
 // Initialize the container
 const container = createContainer();
@@ -59,6 +66,15 @@ container.register({
 
   cartService: asClass(CartService).scoped(),
   cartController: asClass(CartController).scoped(),
+
+  checkoutService: asClass(CheckoutService).scoped(),
+  checkoutController: asClass(CheckoutController).scoped(),
+
+  transactionService: asClass(TransactionService).scoped(),
+  transactionController: asClass(TransactionController).scoped(),
+
+  orderService: asClass(OrderService).scoped(),
+  orderController: asClass(OrderController).scoped(),
 });
 
 module.exports = container;
