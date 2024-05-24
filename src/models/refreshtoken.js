@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       RefreshToken.belongsTo(models.User, {
         foreignKey: "user_id",
         as: "user",
+        constraints: false,
       });
     }
   }
