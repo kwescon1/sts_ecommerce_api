@@ -22,7 +22,7 @@ class CartController {
 
     const cart = await this.cartService.getUserCart(userId, cartId);
 
-    return res.success(cart, "User cart retrieved successfully");
+    return res.success({ cart: cart }, "User cart retrieved successfully");
   }
 
   async updateItemQuantity(req, res, cartId) {
