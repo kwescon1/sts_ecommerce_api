@@ -43,9 +43,12 @@ class ErrorHandler {
       case "ForbiddenException":
         res.error(err.message, err.status);
         break;
-      // Add more cases as needed for other custom errors
 
       case "ConflictException":
+        res.error(err.message, err.status);
+        break;
+
+      case "ApiException":
         res.error(err.message, err.status);
         break;
       default:
