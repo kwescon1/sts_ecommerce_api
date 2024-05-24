@@ -3,6 +3,7 @@ const ConflictException = require("../exceptions/conflictException");
 const NotFoundException = require("../exceptions/notFoundException");
 const { encrypt } = require("../utilities/utils");
 const CartResource = require("../resources/getCartResource");
+const CART_CACHE_KEY = "CART-";
 /**
  * Represents the service for managing cart.
  * Encapsulates the business logic for cart operations.
@@ -11,6 +12,8 @@ class CartService {
   constructor({ redisService }) {
     this.redisService = redisService;
   }
+
+  static CART_KEY = CART_CACHE_KEY;
 
   async storeCartItem(userId, data) {
     return await sequelize.transaction(async (transaction) => {
@@ -114,9 +117,9 @@ class CartService {
     }
     // create cache for faster checkout
 
-    cart = new CartResource(cart);
+    cart = new CartResource(cart).toJson();
 
-    await this.redisService.set(Cart.CART_CACHE_KEY + cartId, encrypt(cart));
+    await this.redisService.set(CartService.CART_KEY + cartId, encrypt(cart));
 
     return cart;
   }
@@ -271,8 +274,8 @@ class CartService {
   }
 
   async clearCache(cart_id) {
-    if (await this.redisService.get(Cart.CART_CACHE_KEY + cart_id)) {
-      await this.redisService.del(Cart.CART_CACHE_KEY + cart_id);
+    if (await this.redisService.get(CartService.CART_KEY + cart_id)) {
+      await this.redisService.del(CartService.CART_KEY + cart_id);
     }
     return;
   }
