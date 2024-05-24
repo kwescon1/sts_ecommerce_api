@@ -14,7 +14,7 @@ class CartResource {
           id: item.product.id,
           name: item.product.name,
           sku: item.product.sku,
-          // category_id: item.product.category_id,
+          category_id: item.product.category_id,
           cost_price: item.product.stock.cost_price,
         },
       };
