@@ -7,13 +7,11 @@ const {
   productValidationRules,
   productUpdateValidationRules,
 } = require("../requests/productRequest");
-const { extractProfileData } = require("../utilities/utils");
 const {
   upload,
   handleUploadError,
   validateImage,
 } = require("../middlewares/multer");
-const ForbiddenException = require("../exceptions/forbiddenException");
 
 // Create a new router instance.
 const productRoutes = express.Router();
@@ -671,7 +669,7 @@ productRoutes.delete(
  * /api/v1/products/{product_id}:
  *   put:
  *     summary: Update a product
- *  description: Updates a product. This action requires admin authorization.
+ *     description: Updates a product. This action requires admin authorization.
  *     tags: [Products]
  *     security:
  *       - bearerAuth: []
