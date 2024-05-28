@@ -242,6 +242,122 @@ checkoutRoutes.post(
   })
 );
 
+/**
+ * @swagger
+ * /api/v1/checkout/cart/confirm-payment:
+ *   post:
+ *     summary: Confirm Payment
+ *     description: Confirm a payment and update necessary data like transaction,stock,order.
+ *     tags: [Checkout]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               payment_id:
+ *                 type: string
+ *                 example: "pi_3PLWRSDm1QPN74Xl3hM4KnWJ"
+ *             required:
+ *               - payment_id
+ *     responses:
+ *       200:
+ *         description: Successful transaction confirmation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     order:
+ *                       type: object
+ *                       properties:
+ *                         total_price:
+ *                           type: number
+ *                           example: 273.19
+ *                         id:
+ *                           type: string
+ *                           example: "ead088c2-06d0-4495-9afe-6df9cd0e177f"
+ *                         user_id:
+ *                           type: string
+ *                           example: "fb600a66-e9cb-41e2-b5f8-70fd0cc331d4"
+ *                         order_number:
+ *                           type: string
+ *                           example: "ORD-20240528-00001"
+ *                         status:
+ *                           type: string
+ *                           example: "confirmed"
+ *                         order_date:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2024-05-28T13:31:56.000Z"
+ *                         created_at:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2024-05-28T13:31:56.000Z"
+ *                         updated_at:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2024-05-28T13:31:56.000Z"
+ *                         deleted_at:
+ *                           type: string
+ *                           format: date-time
+ *                           nullable: true
+ *                           example: null
+ *               required:
+ *                 - order
+ *             message:
+ *               type: string
+ *               example: "Successful transaction"
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Bad Request"
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ */
+
 checkoutRoutes.post(
   "/confirm-payment",
   authenticate,
