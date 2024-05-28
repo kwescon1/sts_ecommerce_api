@@ -158,7 +158,13 @@ class CartService {
     });
   }
 
-  async clearUserCart(userId, cartId) {
+  async clearUserCart(userId, cartId, transaction = null) {
+    console.log("user id is " + userId + " and cartId is " + cartId);
+    let options = {};
+    if (transaction) {
+      options.transaction = transaction;
+    }
+
     return await sequelize.transaction(async (transaction) => {
       // Find the cart with the given ID and user ID
       const cart = await Cart.scope("withDates").findOne({
@@ -172,10 +178,13 @@ class CartService {
       }
 
       // Delete all associated cart items
-      await CartItem.destroy({
-        where: { cart_id: cartId },
-        transaction,
-      });
+      await sequelize.query(
+        `UPDATE cart_items SET is_ordered = 1, deleted_at = NOW() WHERE cart_id = :cartId`,
+        {
+          replacements: { cartId },
+          transaction,
+        }
+      );
 
       // Set the is_current column to 0 and update deleted_at timestamp manually
       await sequelize.query(
@@ -189,7 +198,7 @@ class CartService {
       await this.clearCache(cartId);
 
       return true;
-    });
+    }, options);
   }
 
   async updateItemQuantity(data, userId, cartId) {
