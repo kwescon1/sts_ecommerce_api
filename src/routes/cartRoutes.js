@@ -117,7 +117,7 @@ cartRoutes.post(
 /**
  * @swagger
  * /api/v1/cart/{cart_id}:
- *   post:
+ *   get:
  *     summary: Retrieve a user's cart by its ID
  *     description: Retrieves a user's cart and its items. Requires user authentication.
  *     tags: [Cart]
