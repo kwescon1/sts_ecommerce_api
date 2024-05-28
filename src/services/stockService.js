@@ -200,6 +200,39 @@ class StockService {
 
     return true;
   }
+
+  async updateStock(productId, purchasedQuantity, transaction) {
+    try {
+      // Find the stock record for the given product
+      const stock = await Stock.findOne({
+        where: { product_id: productId },
+        transaction,
+      });
+
+      if (!stock) {
+        throw new NotFoundException(
+          "Stock not found for product ID " + productId
+        );
+      }
+
+      const currentQuantity = stock.quantity;
+      const newStock = currentQuantity - purchasedQuantity;
+
+      // Update the stock quantity
+      await stock.update({ quantity: newStock }, { transaction });
+
+      // Update the product's last_updated_restock_level
+      await Product.update(
+        { last_updated_restock_level: currentQuantity },
+        { where: { id: productId }, transaction }
+      );
+
+      return stock;
+    } catch (error) {
+      console.error("Error updating stock:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = StockService;
