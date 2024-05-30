@@ -16,11 +16,11 @@ const errorHandler = require("./exceptions/handler.js");
 const CorsMiddleware = require("./middlewares/handleCors.js");
 const RateLimiter = require("./middlewares/rateLimiter.js");
 const responseMacro = require("./middlewares/response.js");
-const ConvertEmptyStringsToNull = require("./middlewares/ConvertEmptyStringsToNull.js");
+const ConvertEmptyStringsToNull = require("./middlewares/convertEmptyStringsToNull.js");
 const TrimStringsMiddleware = require("./middlewares/trimStrings.js");
 const HelmetConfig = require("./middlewares/helmet.js");
 const container = require("./config/container.js");
-const AttachContainerMiddleware = require("./middlewares/AttachContainer.js");
+const AttachContainerMiddleware = require("./middlewares/attachContainer.js");
 const NotFoundException = require("./exceptions/notFoundException.js");
 
 // Security first
